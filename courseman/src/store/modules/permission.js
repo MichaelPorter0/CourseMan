@@ -43,23 +43,17 @@ const permission = {
     SET_ROUTERS: (state, routers) => {
       state.addRouters = routers
       state.routers = constantRouterMap.concat(routers)
-      console.log(state.routers)
     }
   },
   actions: {
     GenerateRoutes({ commit }, data) {
       return new Promise(resolve => {
         const { roles } = data
-        console.log('nb')
-        console.log(roles)
         let accessedRouters
         if (roles.includes('admin')) {
           accessedRouters = asyncRouterMap
-          console.log('isAdmin')
-          console.log(accessedRouters)
         } else {
           accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
-          console.log('not admin')
         }
         commit('SET_ROUTERS', accessedRouters)
         resolve()

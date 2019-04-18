@@ -5,8 +5,8 @@ import { getToken } from '@/utils/auth'
 
 // 创建axios实例
 const service = axios.create({
-  // baseURL: process.env.BASE_API, // api 的 base_url
-  baseURL: 'https://easy-mock.com/mock/5cb69992044dc152e063003a',
+  baseURL: process.env.BASE_API, // api 的 base_url
+  // baseURL: 'https://easy-mock.com/mock/5cb69992044dc152e063003a',
   timeout: 5000 // 请求超时时间
 })
 
@@ -62,7 +62,6 @@ service.interceptors.response.use(
     }
   },
   error => {
-    console.log('nb')
     console.log('err' + error) // for debug
     Message({
       message: error.message,
