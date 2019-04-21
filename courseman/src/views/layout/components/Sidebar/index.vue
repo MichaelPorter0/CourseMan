@@ -28,7 +28,7 @@ export default {
     ]),
     routes() {
       // return this.$router.options.routes
-      return store.getters.addRouters
+      return store.getters.permission_routers
     },
     variables() {
       return variables
