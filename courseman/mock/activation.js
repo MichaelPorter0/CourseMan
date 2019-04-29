@@ -16,5 +16,14 @@ export default {
       code: 20000,
       data: items
     }
+  },
+  create: () => {
+    const item = Mock.mock({
+      activation: '@sentence(1,1)'
+    })
+    return {
+      code: 20000,
+      data: item
+    }
   }
 }

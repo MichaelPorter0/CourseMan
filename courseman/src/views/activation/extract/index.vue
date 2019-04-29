@@ -1,0 +1,59 @@
+<template>
+  <div>
+    <el-row class="row" type="flex" justify="center" align="middle">
+      <el-tag size="medium">{{ inputData }}</el-tag>
+    </el-row>
+    <el-row type="flex" justify="center">
+      <el-button type="primary" icon="document" @click="handleCopy(inputData,$event)">
+        复制
+      </el-button>
+    </el-row>
+  </div>
+</template>
+
+<script>
+import clip from '@/utils/clipboard' // use clipboard directly
+import { create } from '@/api/activation'
+export default {
+  data() {
+    return {
+      inputData: 'https://github.com/PanJiaChen/vue-element-admin'
+    }
+  },
+  created() {
+    this.fetchData()
+  },
+  methods: {
+    fetchData() {
+      create(this.listQuery).then(response => {
+        this.inputData = response.data.activation
+      })
+    },
+    handleCopy(text, event) {
+      clip(text, event)
+    },
+    clipboardSuccess() {
+      this.$message({
+        message: '复制 成功',
+        type: 'success',
+        duration: 1500
+      })
+    }
+  }
+}
+</script>
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+.dashboard {
+  &-container {
+    margin: 30px;
+  }
+  &-text {
+    font-size: 30px;
+    line-height: 46px;
+  }
+}
+.row{
+  height: 150px;
+}
+</style>

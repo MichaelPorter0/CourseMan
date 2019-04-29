@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import router from '@/router'
 export default {
   data() {
     return {
@@ -41,12 +42,20 @@ export default {
   methods: {
     reconfirm() {
       if (this.value === '') {
-        this.$alert('你还没有选择班级', '注意')
+        this.$confirm('你还没有选择班级', '提示', { center: true,
+          showCancelButton: false })
       } else {
-        this.$alert('你提取的课程是' + this.value, '确认', {
-          showCancelButton: true,
+        this.$confirm('你提取的课程是' + this.value, '确认', {
+          confirmButtonText: '确定',
           cancelButtonText: '取消',
-          confirmButtonText: '确定'
+          center: true
+        }).then(() => {
+          router.push({ name: 'activationextract', params: { course: this.value }})
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          })
         })
       }
     }

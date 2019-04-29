@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">学生管理</div>
+    <div class="dashboard-text">作业发布</div>
   </div>
 </template>
 

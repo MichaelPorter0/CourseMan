@@ -4,6 +4,7 @@ import tableAPI from './table'
 import courseAPI from './course'
 import classAPI from './class'
 import activationAPI from './activation'
+import videoAPI from './video'
 // Fix an issue with setting withCredentials = true, cross-domain request lost cookies
 // https://github.com/nuysoft/Mock/issues/300
 Mock.XHR.prototype.proxy_send = Mock.XHR.prototype.send
@@ -33,4 +34,8 @@ Mock.mock(/\/class\/list/, 'get', classAPI.list)
 
 // activation
 Mock.mock(/\/activation\/list/, 'get', activationAPI.list)
+Mock.mock(/\/activation\/create/, 'get', activationAPI.create)
+
+// video
+Mock.mock(/\/video\/list/, 'get', videoAPI.list)
 export default Mock

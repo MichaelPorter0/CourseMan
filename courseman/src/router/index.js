@@ -8,7 +8,7 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '../views/layout/Layout'
-import './font/font.css'
+
 /**
 * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
 * alwaysShow: true               if set true, will always show the root menu, whatever its child routes length
@@ -31,28 +31,30 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/dashboard',
     name: 'Dashboard',
-    hidden: true,
+    hidden: false,
+    meta: { title: '主页', icon: 'dashboard' },
     children: [{
       path: 'dashboard',
-      component: () => import('@/views/dashboard/index')
+      component: () => import('@/views/dashboard/index'),
+      meta: { title: '主页', icon: 'dashboard ' }
     }]
   },
   {
     path: '/course',
     component: Layout,
+    meta: { title: '课程列表', icon: '课程管理' },
     children: [
       {
         path: 'index',
         name: '课程',
         component: () => import('@/views/course/index'),
-        meta: { title: '课程', icon: 'form' }
+        meta: { title: '课程列表', icon: '列表' }
       },
       {
         path: 'create',
         name: 'coursecreate',
         component: () => import('@/views/course/create/index'),
-        meta: { title: '创建', icon: 'form' },
-        hidden: true
+        meta: { title: '创建课程', icon: 'form' }
       },
       {
         path: 'modify',
@@ -64,28 +66,45 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/class',
+    path: '/video',
     component: Layout,
-    redirect: '/class',
-    name: 'Class',
+    redirect: '/video',
+    name: 'Video',
     hidden: false,
-    children: [{
-      path: 'index',
-      component: () => import('@/views/class/index'),
-      meta: { title: '班级管理', icon: 'form' }
-    }]
+    meta: { title: '视频管理', icon: '视频', affix: true },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/video/list'),
+        meta: { title: '视频列表', icon: '列表' }
+      },
+      {
+        path: 'upload',
+        name: 'videoupload',
+        component: () => import('@/views/video/upload'),
+        meta: { title: '视频上传', icon: 'upload' }
+      }
+    ]
   },
   {
-    path: '/student',
+    path: '/homework',
     component: Layout,
-    redirect: '/student',
-    name: 'Student',
+    redirect: '/homework',
+    name: 'Homework',
     hidden: false,
-    children: [{
-      path: 'index',
-      component: () => import('@/views/student/index'),
-      meta: { title: '学生管理', icon: 'form' }
-    }]
+    meta: { title: '作业管理', icon: '作业' },
+    children: [
+      {
+        path: 'create',
+        component: () => import('@/views/homework/create'),
+        meta: { title: '作业发布', icon: '发布' }
+      },
+      {
+        path: 'list',
+        component: () => import('@/views/homework/list'),
+        meta: { title: '作业检查', icon: '检查指标' }
+      }
+    ]
   },
   {
     path: '/activation',
@@ -93,19 +112,26 @@ export const constantRouterMap = [
     redirect: '/activation',
     name: 'Activation',
     hidden: false,
-    meta: { title: '激活码管理', icon: 'form' },
+    meta: { title: '激活码管理', icon: '激活码' },
     children: [
       {
         path: 'create',
         name: 'activationcreate',
         component: () => import('@/views/activation/create/index'),
-        meta: { title: '提取激活码', icon: 'form' }
+        meta: { title: '提取激活码', icon: '生成目录' }
       },
       {
         path: 'list',
         name: 'activationlist',
         component: () => import('@/views/activation/list/index'),
-        meta: { title: '提取历史', icon: 'form' }
+        meta: { title: '提取历史', icon: '历史' }
+      },
+      {
+        path: 'extract:course',
+        name: 'activationextract',
+        hidden: true,
+        component: () => import('@/views/activation/extract/index'),
+        meta: { title: '提取激活码' }
       }
     ]
   }
@@ -117,19 +143,19 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: '/miniprogram',
     name: 'miniprogram',
-    meta: { title: '小程序信息管理', icon: 'example', roles: ['admin'] },
+    meta: { title: '小程序信息管理', icon: '小程序', roles: ['admin'] },
     children: [
       {
         path: 'banner',
         name: 'banner',
         component: () => import('@/views/miniprogram/banner/index'),
-        meta: { title: '轮播图管理', icon: 'table' }
+        meta: { title: '轮播图管理', icon: '首页轮播图' }
       },
       {
         path: 'announcement',
         name: 'announcement',
         component: () => import('@/views/miniprogram/announcement/index'),
-        meta: { title: '通知管理', icon: 'tree' }
+        meta: { title: '通知管理', icon: '通知' }
       }
     ]
   },

@@ -11,7 +11,7 @@
     </div>
     <el-table
       v-loading="listLoading"
-      :data="searchData"
+      :data="list"
       element-loading-text="Loading"
       border
       fit
@@ -21,42 +21,20 @@
           {{ scope.$index }}
         </template>
       </el-table-column>
-      <el-table-column label="课程名称">
+      <el-table-column label="视频名称">
         <template slot-scope="scope">
           {{ scope.row.title }}
         </template>
       </el-table-column>
-      <el-table-column label="开课老师" width="110" align="center">
+      <el-table-column label="视频地址">
         <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="课时" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.coursenum }}
-        </template>
-      </el-table-column>
-      <el-table-column label="选课学生人数" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.studentnum }}
-        </template>
-      </el-table-column>
-      <el-table-column class-name="status-col" label="课程状态" width="110" align="center">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="created_at" label="开课时间" width="200">
-        <template slot-scope="scope">
-          <i class="el-icon-time"/>
-          <span>{{ scope.row.Begin_time }}</span>
+          {{ scope.row.url }}
         </template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="操作" width="200">
         <template slot-scope="scope">
           <el-button-group>
             <el-button type="primary" icon="el-icon-edit" @click="editClick(scope.row)" />
-            <el-button type="primary" icon="el-icon-share" @click="shareClick(scope.row.id)" />
             <el-button type="primary" icon="el-icon-delete" @click="deleteClick(scope.row)" />
           </el-button-group>
         </template>
@@ -67,7 +45,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/course'
+import { getList } from '@/api/video'
 import Sticky from '@/components/Sticky'
 import router from '@/router'
 export default {
@@ -76,6 +54,7 @@ export default {
     statusFilter(status) {
       const statusMap = {
         published: 'success',
+        draft: 'gray',
         deleted: 'danger'
       }
       return statusMap[status]
@@ -86,19 +65,6 @@ export default {
       list: null,
       listLoading: true,
       input: ''
-    }
-  },
-  computed: {
-    searchData: function() {
-      var search = this.input
-      if (search) {
-        return this.list.filter(function(product) {
-          return Object.keys(product).some(function(key) {
-            return String(product[key]).toLowerCase().indexOf(search) > -1
-          })
-        })
-      }
-      return this.list
     }
   },
   created() {
@@ -116,7 +82,7 @@ export default {
       alert('搜索' + this.input)
     },
     createClick() {
-      router.push({ name: 'coursecreate' })
+      router.push({ name: 'videoupload' })
     },
     editClick(row) {
       router.push({ name: 'coursemodify' })
