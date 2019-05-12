@@ -1,48 +1,26 @@
 <template>
-  <div>
-    <el-upload
-      :on-preview="handlePictureCardPreview"
-      :on-remove="handleRemove"
-      action="https://jsonplaceholder.typicode.com/posts/"
-      list-type="picture-card">
-      <i class="el-icon-plus"/>
-    </el-upload>
-    <el-dialog :visible.sync="dialogVisible">
-      <img :src="dialogImageUrl" width="100%" alt="">
-    </el-dialog>
-
-  </div>
-
+  <el-carousel :interval="4000" type="card" height="200px">
+    <el-carousel-item v-for="item in 6" :key="item">
+      <h3 class="medium">{{ item }}</h3>
+    </el-carousel-item>
+  </el-carousel>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      dialogImageUrl: '',
-      dialogVisible: false
-    }
-  },
-  methods: {
-    handleRemove(file, fileList) {
-      console.log(file, fileList)
-    },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url
-      this.dialogVisible = true
-    }
+<style>
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 200px;
+    margin: 0;
   }
-}
-</script>
 
-<style rel="stylesheet/scss" lang="scss" scoped>
-.dashboard {
-  &-container {
-    margin: 30px;
+  .el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
   }
-  &-text {
-    font-size: 30px;
-    line-height: 46px;
+
+  .el-carousel__item:nth-child(2n+1) {
+    background-color: #d3dce6;
   }
-}
 </style>
+

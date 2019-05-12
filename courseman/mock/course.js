@@ -17,5 +17,19 @@ export default {
       code: 20000,
       data: items
     }
+  },
+  video: () => {
+    const items = Mock.mock({
+      'items|5': [{
+        id: '@id',
+        title: '@sentence(10, 20)',
+        url: '@sentence(10, 20)'
+      }]
+    })
+    return {
+      code: 20000,
+      data: items
+    }
   }
+
 }

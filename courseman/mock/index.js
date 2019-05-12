@@ -28,6 +28,7 @@ Mock.mock(/\/table\/list/, 'get', tableAPI.list)
 
 // course
 Mock.mock(/\/course\/list/, 'get', courseAPI.list)
+Mock.mock(/\/course\/videolist/, 'get', courseAPI.video)
 
 // class
 Mock.mock(/\/class\/list/, 'get', classAPI.list)

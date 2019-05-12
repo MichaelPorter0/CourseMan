@@ -47,7 +47,7 @@ export const constantRouterMap = [
       {
         path: 'index',
         name: '课程',
-        component: () => import('@/views/course/index'),
+        component: () => import('@/views/course/list/index'),
         meta: { title: '课程列表', icon: '列表' }
       },
       {
@@ -61,6 +61,12 @@ export const constantRouterMap = [
         name: 'coursemodify',
         component: () => import('@/views/course/modify/index'),
         meta: { title: '修改', icon: 'form' },
+        hidden: true
+      },
+      {
+        path: 'chapter',
+        name: 'coursechapter',
+        component: () => import('@/views/course/chapter/index'),
         hidden: true
       }
     ]

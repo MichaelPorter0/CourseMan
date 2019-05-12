@@ -122,7 +122,7 @@ export default {
       router.push({ name: 'coursemodify' })
     },
     shareClick(row) {
-      alert('点击了分享' + row)
+      router.push({ name: 'coursechapter' })
     },
     deleteClick(row) {
       alert('点击了删除')
