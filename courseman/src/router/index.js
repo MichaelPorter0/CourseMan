@@ -83,6 +83,12 @@ export const constantRouterMap = [
         name: 'videoupload',
         component: () => import('@/views/video/upload'),
         meta: { title: '视频上传', icon: 'upload' }
+      },
+      {
+        path: 'detail',
+        name: 'videodetail',
+        hidden: true,
+        component: () => import('@/views/video/detail')
       }
     ]
   },

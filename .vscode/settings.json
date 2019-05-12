@@ -37,4 +37,12 @@
     "window.title": "${dirty}${activeEditorMedium}${separator}${rootName}",
     "editor.codeLens": true,
     "editor.snippetSuggestions": "top",
+
+
+    // "vscode_custom_css.imports": [
+        
+    //     "file:///home/michale/Documents/VsCode/custom.css",
+    //     "file:///home/michale/Documents/VsCode/custom.js"
+    //   ],
+    // "vscode_custom_css.policy": true,
   }

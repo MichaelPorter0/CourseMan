@@ -12,6 +12,16 @@
     <el-row type="flex" justify="center">
       <el-button type="primary" round @click="reconfirm">提取激活码</el-button>
     </el-row>
+    <el-row>
+      <el-col :span="5" :offset="10">
+        <el-steps :active="1">
+          <el-step title="步骤 1" description="选择激活码对应的课程"/>
+          <el-step title="步骤 2" description="复制您的激活码"/>
+        </el-steps>
+      </el-col>
+
+    </el-row>
+
   </div>
 </template>
 
