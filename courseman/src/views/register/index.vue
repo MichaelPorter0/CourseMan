@@ -28,11 +28,6 @@
           登录
         </el-button>
       </el-form-item>
-      <el-form-item>
-        <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="register">
-          注册
-        </el-button>
-      </el-form-item>
 
     </el-form>
   </div>
@@ -103,9 +98,6 @@ export default {
           return false
         }
       })
-    },
-    register() {
-      console.log('error submit!!')
     }
   }
 }

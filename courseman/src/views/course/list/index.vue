@@ -55,9 +55,16 @@
       <el-table-column align="center" prop="created_at" label="操作" width="200">
         <template slot-scope="scope">
           <el-button-group>
-            <el-button type="primary" icon="el-icon-edit" @click="editClick(scope.row)" />
-            <el-button type="primary" icon="el-icon-share" @click="shareClick(scope.row.id)" />
-            <el-button type="primary" icon="el-icon-delete" @click="deleteClick(scope.row)" />
+            <el-tooltip class="item" effect="dark" content="编辑课程信息" placement="top-start">
+              <el-button type="primary" icon="el-icon-edit" @click="editClick(scope.row)" />
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="编辑课程内容" placement="top-start">
+              <el-button type="primary" icon="el-icon-share" @click="shareClick(scope.row.id)" />
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="删除此课程" placement="top-start">
+              <el-button type="primary" icon="el-icon-delete" @click="deleteClick(scope.row)" />
+            </el-tooltip>
+
           </el-button-group>
         </template>
 

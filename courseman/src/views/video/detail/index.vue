@@ -1,43 +1,48 @@
 
 <template>
-  <md-card>
-    <md-card-actions>
-      <div class="md-subhead">
-        <span>Base Config / 基本示例</span>
-      </div>
-      <md-button
-        class="md-icon-button"
-        target="_blank"
-        href="https://github.com/surmon-china/vue-video-player/tree/master/examples/01-video.vue">
-        <md-icon>code</md-icon>
-      </md-button>
-    </md-card-actions>
-    <md-card-media>
-      <div class="item">
-        <div class="player">
-          <video-player
-            ref="videoPlayer"
-            :options="playerOptions"
-            :playsinline="true"
-            class="vjs-custom-skin"
-            @play="onPlayerPlay($event)"
-            @pause="onPlayerPause($event)"
-            @ended="onPlayerEnded($event)"
-            @loadeddata="onPlayerLoadeddata($event)"
-            @waiting="onPlayerWaiting($event)"
-            @playing="onPlayerPlaying($event)"
-            @timeupdate="onPlayerTimeupdate($event)"
-            @canplay="onPlayerCanplay($event)"
-            @canplaythrough="onPlayerCanplaythrough($event)"
-            @ready="playerReadied"
-            @statechanged="playerStateChanged($event)" />
-        </div>
-      </div>
-    </md-card-media>
-  </md-card>
+  <el-container>
+    <el-header>
+      <el-row type="flex" justify="center">
+        <el-col :span="4" >
+          <p class="title">天圆地方</p>
+        </el-col>
+    </el-row></el-header>
+    <el-main>
+      <el-row type="flex" justify="center">
+        <el-col :span="12">
+          <!-- <md-card>
+            <md-card-media> -->
+          <div class="item">
+            <div class="player">
+              <video-player
+                ref="videoPlayer"
+                :options="playerOptions"
+                :playsinline="true"
+                class="vjs-custom-skin"
+                @play="onPlayerPlay($event)"
+                @pause="onPlayerPause($event)"
+                @ended="onPlayerEnded($event)"
+                @loadeddata="onPlayerLoadeddata($event)"
+                @waiting="onPlayerWaiting($event)"
+                @playing="onPlayerPlaying($event)"
+                @timeupdate="onPlayerTimeupdate($event)"
+                @canplay="onPlayerCanplay($event)"
+                @canplaythrough="onPlayerCanplaythrough($event)"
+                @ready="playerReadied"
+                @statechanged="playerStateChanged($event)" />
+            </div>
+          </div>
+          <!-- </md-card-media>
+          </md-card> -->
+        </el-col>
+
+    </el-row></el-main>
+  </el-container>
+
 </template>
 
 <script>
+import './custom-theme.css'
 export default {
   data() {
     return {
@@ -50,10 +55,8 @@ export default {
         playbackRates: [0.7, 1.0, 1.5, 2.0],
         sources: [{
           type: 'video/mp4',
-          // mp4
-          src: 'https://dxytest.oss-cn-beijing.aliyuncs.com/%E8%A7%86%E9%A2%9113%E5%88%86%E9%92%9F.mp4?OSSAccessKeyId=LTAIOqv4Q2PQZNsN&Expires=1557126983&Signature=IPLggfd8w0PXXG4GGcwO4UibAn8%3D'
-        // webm
-        // src: "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm"
+          src: 'http://dxytest.oss-cn-beijing.aliyuncs.com/%E8%A7%86%E9%A2%9113%E5%88%86%E9%92%9F.mp4?Expires=1557674831&OSSAccessKeyId=TMP.AgGuW4Iak2RCAAcPTyiAVpa1ezlvKJAlr_allJZnKVSYWDrQ2q33SC0yihlCADAtAhR93ncTj9PG1rBksQLEe-FFyHOciQIVANzAWbsXCxb4EACJRCCJkeXkBuy4&Signature=DjLSP4%2F46YcB4Xfq2d%2BxstalAWY%3D'
+          // src: 'http://dxytest.oss-cn-beijing.aliyuncs.com/%E8%A7%86%E9%A2%912%E5%88%86%E9%92%9F.mp4?Expires=1557674806&OSSAccessKeyId=TMP.AgGuW4Iak2RCAAcPTyiAVpa1ezlvKJAlr_allJZnKVSYWDrQ2q33SC0yihlCADAtAhR93ncTj9PG1rBksQLEe-FFyHOciQIVANzAWbsXCxb4EACJRCCJkeXkBuy4&Signature=m%2BPgLs3cmsUlh3jez1nOSd%2BRxN0%3D'
         }],
         poster: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg'
       }
@@ -129,5 +132,8 @@ export default {
 <style>
 .player{
   widows: 50px;
+}
+.title{
+  font-size: 30px;
 }
 </style>
