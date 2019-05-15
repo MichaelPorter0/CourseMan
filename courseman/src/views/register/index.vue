@@ -1,23 +1,52 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+    <el-form ref="RegisterForm" :model="RegisterForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
       <h3 class="title">围棋课程管理</h3>
-      <el-form-item prop="username">
+      <el-form-item prop="email">
+        <span class="svg-container">
+          <svg-icon icon-class="邮箱" />
+        </span>
+        <el-input v-model="RegisterForm.email" name="email" type="text" auto-complete="on" placeholder="输入您的邮箱" />
+      </el-form-item>
+      <el-form-item prop="nickname">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
-        <el-input v-model="loginForm.username" name="username" type="text" auto-complete="on" placeholder="username" />
+        <el-input v-model="RegisterForm.nickname" name="nickname" type="text" auto-complete="on" placeholder="您的昵称" />
       </el-form-item>
+      <el-form-item prop="phone">
+        <span class="svg-container">
+          <svg-icon icon-class="手机" />
+        </span>
+        <el-input v-model="RegisterForm.phone" name="phone" type="text" auto-complete="on" placeholder="您的电话" />
+      </el-form-item>
+
       <el-form-item prop="password">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
         <el-input
           :type="pwdType"
-          v-model="loginForm.password"
+          v-model="RegisterForm.password"
           name="password"
           auto-complete="on"
-          placeholder="password"
+          placeholder="密码"
+          @keyup.enter.native="handleLogin" />
+          <!-- <span class="show-pwd" @click="showPwd">
+          <svg-icon :icon-class="pwdType === 'password' ? 'eye' : 'eye-open'" />
+        </span> -->
+      </el-form-item>
+
+      <el-form-item prop="repassword">
+        <span class="svg-container">
+          <svg-icon icon-class="password" />
+        </span>
+        <el-input
+          :type="pwdType"
+          v-model="RegisterForm.repassword"
+          name="repassword"
+          auto-complete="on"
+          placeholder="确认您的密码"
           @keyup.enter.native="handleLogin" />
         <span class="show-pwd" @click="showPwd">
           <svg-icon :icon-class="pwdType === 'password' ? 'eye' : 'eye-open'" />
@@ -25,7 +54,12 @@
       </el-form-item>
       <el-form-item>
         <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
-          登录
+          注册
+        </el-button>
+      </el-form-item>
+      <el-form-item>
+        <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="BacktoLogin">
+          返回
         </el-button>
       </el-form-item>
 
@@ -34,19 +68,35 @@
 </template>
 
 <script>
-import { isvalidUsername } from '@/utils/validate'
+import { isNickname, isvalidEmail, isPhoneNumber } from '@/utils/validate'
 
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
-        callback(new Error('请输入正确的用户名'))
+    const validateEmail = (rule, value, callback) => {
+      if (!isvalidEmail(value)) {
+        callback(new Error('请输入正确的邮箱'))
+      } else {
+        callback()
+      }
+    }
+    const validateNickname = (rule, value, callback) => {
+      if (!isNickname(value)) {
+        callback(new Error('请输入正确的昵称,只能含有汉字字母和数字!'))
+      } else {
+        callback()
+      }
+    }
+    const validatePhone = (rule, value, callback) => {
+      console.log(value.length)
+      if (!isPhoneNumber(value)) {
+        callback(new Error('这似乎不是一个正确的手机号'))
       } else {
         callback()
       }
     }
     const validatePass = (rule, value, callback) => {
+      console.log(value.length)
       if (value.length < 5) {
         callback(new Error('密码不能小于5位'))
       } else {
@@ -54,13 +104,19 @@ export default {
       }
     }
     return {
-      loginForm: {
-        username: '',
-        password: ''
+      RegisterForm: {
+        email: '',
+        nickname: '',
+        phone: '',
+        password: '',
+        repassword: ''
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePass }]
+        email: [{ required: true, trigger: 'blur', validator: validateEmail }],
+        nickname: [{ required: true, trigger: 'blur', validator: validateNickname }],
+        phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
+        password: [{ required: true, trigger: 'blur', validator: validatePass }],
+        repassword: [{ required: true, trigger: 'blur', validator: validatePass }]
       },
       loading: false,
       pwdType: 'password',
@@ -98,6 +154,9 @@ export default {
           return false
         }
       })
+    },
+    BacktoLogin() {
+      this.$router.push({ path: '/login' })
     }
   }
 }

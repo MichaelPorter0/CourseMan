@@ -32,12 +32,10 @@
         <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="register">
           注册
         </el-button>
+
       </el-form-item>
-      <el-form-item>
-        <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="Retrievepassword">
-          忘记密码?
-        </el-button>
-      </el-form-item>
+ 
+
     </el-form>
   </div>
 </template>
@@ -109,9 +107,6 @@ export default {
       })
     },
     register() {
-      this.$router.push({ name: 'register' })
-    },
-    Retrievepassword() {
       console.log('error submit!!')
     }
   }

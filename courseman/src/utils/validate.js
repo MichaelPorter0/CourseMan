@@ -51,7 +51,7 @@ export function validAlphabets(str) {
  * @param {string} email
  * @returns {Boolean}
  */
-export function validEmail(email) {
+export function isvalidEmail(email) {
   const reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return reg.test(email)
 }
@@ -76,4 +76,23 @@ export function isArray(arg) {
     return Object.prototype.toString.call(arg) === '[object Array]'
   }
   return Array.isArray(arg)
+}
+/**
+ * @param {string} str
+ * @returns {Boolean}
+ */
+
+export function isNickname(str) {
+  const reg = /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/
+  return reg.test(str)
+}
+
+/**
+ * @param {string} str
+ * @returns {Boolean}
+ */
+
+export function isPhoneNumber(str) {
+  const reg = /^[1][3,4,5,7,8][0-9]{9,9}$/
+  return reg.test(str)
 }
