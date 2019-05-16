@@ -31,29 +31,29 @@
           name="password"
           auto-complete="on"
           placeholder="密码"
-          @keyup.enter.native="handleLogin" />
+          @keyup.enter.native="handleRegister" />
           <!-- <span class="show-pwd" @click="showPwd">
           <svg-icon :icon-class="pwdType === 'password' ? 'eye' : 'eye-open'" />
         </span> -->
       </el-form-item>
 
-      <el-form-item prop="repassword">
+      <el-form-item prop="passwordConfirm">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
         <el-input
           :type="pwdType"
-          v-model="RegisterForm.repassword"
-          name="repassword"
+          v-model="RegisterForm.passwordConfirm"
+          name="passwordConfirm"
           auto-complete="on"
           placeholder="确认您的密码"
-          @keyup.enter.native="handleLogin" />
+          @keyup.enter.native="handleRegister" />
         <span class="show-pwd" @click="showPwd">
           <svg-icon :icon-class="pwdType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
       <el-form-item>
-        <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
+        <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="handleRegister">
           注册
         </el-button>
       </el-form-item>
@@ -69,9 +69,9 @@
 
 <script>
 import { isNickname, isvalidEmail, isPhoneNumber } from '@/utils/validate'
-
+import { register } from '@/api/user'
 export default {
-  name: 'Login',
+  name: 'Register',
   data() {
     const validateEmail = (rule, value, callback) => {
       if (!isvalidEmail(value)) {
@@ -84,11 +84,16 @@ export default {
       if (!isNickname(value)) {
         callback(new Error('请输入正确的昵称,只能含有汉字字母和数字!'))
       } else {
-        callback()
+        if (value.length > 20) {
+          callback(new Error('您的用户名太长了'))
+        } else if (value.length < 4) {
+          callback(new Error('您的用户名太短了'))
+        } else {
+          callback()
+        }
       }
     }
     const validatePhone = (rule, value, callback) => {
-      console.log(value.length)
       if (!isPhoneNumber(value)) {
         callback(new Error('这似乎不是一个正确的手机号'))
       } else {
@@ -96,11 +101,19 @@ export default {
       }
     }
     const validatePass = (rule, value, callback) => {
-      console.log(value.length)
       if (value.length < 5) {
-        callback(new Error('密码不能小于5位'))
+        callback(new Error('密码太短了!'))
+      } else if (value.length > 20) {
+        callback(new Error('密码太长了!'))
       } else {
         callback()
+      }
+    }
+    const validateRePass = (rule, value, callback) => {
+      if (value === this.RegisterForm.password) {
+        callback()
+      } else {
+        callback(new Error('密码不一致'))
       }
     }
     return {
@@ -109,14 +122,14 @@ export default {
         nickname: '',
         phone: '',
         password: '',
-        repassword: ''
+        passwordConfirm: ''
       },
       loginRules: {
         email: [{ required: true, trigger: 'blur', validator: validateEmail }],
         nickname: [{ required: true, trigger: 'blur', validator: validateNickname }],
         phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
         password: [{ required: true, trigger: 'blur', validator: validatePass }],
-        repassword: [{ required: true, trigger: 'blur', validator: validatePass }]
+        passwordConfirm: [{ required: true, trigger: 'blur', validator: validateRePass }]
       },
       loading: false,
       pwdType: 'password',
@@ -139,13 +152,19 @@ export default {
         this.pwdType = 'password'
       }
     },
-    handleLogin() {
-      this.$refs.loginForm.validate(valid => {
+    handleRegister() {
+      this.$refs.RegisterForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('Login', this.loginForm).then(() => {
+          register(this.RegisterForm).then((data) => {
             this.loading = false
-            this.$router.push({ path: this.redirect || '/' })
+            this.$refs['RegisterForm'].resetFields()
+            this.$message({
+              message: '您已成功注册,请您联系管理员为您登录权限,您现在暂时还不能登录',
+              type: 'success',
+              center: true,
+              duration: 10 * 1000
+            })
           }).catch(() => {
             this.loading = false
           })
