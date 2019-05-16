@@ -6,7 +6,7 @@ import { getToken } from '@/utils/auth'
 // 创建axios实例
 const service = axios.create({
   // baseURL: process.env.BASE_API, // api 的 base_url
-  baseURL: 'http://dftyweiqi.com:8081/',
+  baseURL: 'https://dftyweiqi.com:8081/',
   timeout: 5000 // 请求超时时间
 })
 
@@ -14,7 +14,7 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     if (store.getters.token) {
-      config.headers['X-Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+      config.headers['Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
     }
     return config
   },
@@ -34,12 +34,19 @@ service.interceptors.response.use(
     const res = response.data
 
     if (res.code !== 0) {
-      Message({
-        message: res.message,
-        type: 'error',
-        duration: 5 * 1000
-      })
-
+      if (res.code === 100320) {
+        Message({
+          message: '服务器好像出了点问题',
+          type: 'error',
+          duration: 5 * 1000
+        })
+      } else {
+        Message({
+          message: res.message,
+          type: 'error',
+          duration: 5 * 1000
+        })
+      }
       // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
       if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
         MessageBox.confirm(

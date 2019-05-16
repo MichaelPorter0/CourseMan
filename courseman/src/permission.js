@@ -7,16 +7,18 @@ import { getToken } from '@/utils/auth' // getToken from cookie
 
 NProgress.configure({ showSpinner: false })// NProgress configuration
 
-const whiteList = ['/login', '/register'] // 不重定向白名单
+const whiteList = ['/login', '/register', '/retrieveppwd'] // 不重定向白名单
 router.beforeEach((to, from, next) => {
   NProgress.start()
+  console.log('token ' + getToken())
   if (getToken()) {
-    // console.log(to.path)
     if (to.path === '/login') {
       next({ path: '/' })
       NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
     } else {
-      if (store.getters.roles.length === 0) {
+      console.log('store ' + store.getters.name.length)
+      if (store.getters.name.length === 0) {
+        console.log('我要拉数据了')
         store.dispatch('GetInfo').then(res => { // 拉取用户信息
           // next()
           const roles = res.data.roles // note: roles must be a array! such as: ['editor','develop']
@@ -31,16 +33,14 @@ router.beforeEach((to, from, next) => {
           })
         })
       } else {
+        console.log('我要1234拉数据了')
         next()
       }
     }
   } else {
-    console.log(to.path)
     if (whiteList.indexOf(to.path) !== -1) {
-      console.log(1)
       next()
     } else {
-      console.log(2)
       next(`/login?redirect=${to.path}`) // 否则全部重定向到登录页
       NProgress.done()
     }

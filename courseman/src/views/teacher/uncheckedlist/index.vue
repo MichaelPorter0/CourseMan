@@ -6,7 +6,6 @@
           <el-input v-model="input" name="searchinput" prefix-icon="el-icon-search" placeholder="请输入内容" width="20px"/>
         </el-col>
         <el-button class="search" type="primary" icon="el-icon-search" round @click="searchClick()">搜索</el-button>
-        <el-button type="primary" icon="el-icon-edit-outline" round @click="createClick()">新建</el-button>
       </sticky>
     </div>
     <el-table
@@ -18,51 +17,29 @@
       highlight-current-row>
       <el-table-column align="center" label="ID" width="95">
         <template slot-scope="scope">
-          {{ scope.$index }}
+          {{ scope.$id }}
         </template>
       </el-table-column>
-      <el-table-column label="课程名称">
+      <el-table-column label="邮箱">
         <template slot-scope="scope">
-          {{ scope.row.title }}
+          {{ scope.row.email }}
         </template>
       </el-table-column>
-      <el-table-column label="开课老师" width="110" align="center">
+      <el-table-column label="昵称">
         <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
+          {{ scope.row.teacher.nickname }}
         </template>
       </el-table-column>
-      <el-table-column label="课时" width="110" align="center">
+      <el-table-column label="注册时间" width="110" align="center">
         <template slot-scope="scope">
-          {{ scope.row.coursenum }}
-        </template>
-      </el-table-column>
-      <el-table-column label="选课学生人数" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.studentnum }}
-        </template>
-      </el-table-column>
-      <el-table-column class-name="status-col" label="课程状态" width="110" align="center">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="created_at" label="开课时间" width="200">
-        <template slot-scope="scope">
-          <i class="el-icon-time"/>
-          <span>{{ scope.row.Begin_time }}</span>
+          <span>{{ scope.row.teacher.create_time }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="操作" width="200">
         <template slot-scope="scope">
           <el-button-group>
-            <el-tooltip class="item" effect="dark" content="编辑课程信息" placement="top-start">
-              <el-button type="primary" icon="el-icon-edit" @click="editClick(scope.row)" />
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="编辑课程内容" placement="top-start">
-              <el-button type="primary" icon="el-icon-share" @click="shareClick(scope.row.id)" />
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="删除此课程" placement="top-start">
-              <el-button type="primary" icon="el-icon-delete" @click="deleteClick(scope.row)" />
+            <el-tooltip class="item" effect="dark" content="批准" placement="top-start">
+              <el-button type="primary" icon="el-icon-edit" @click="approveClick(scope.row)" />
             </el-tooltip>
           </el-button-group>
         </template>
@@ -72,9 +49,8 @@
 </template>
 
 <script>
-import { getList } from '@/api/course'
+import { getUncheckTeacherList, ApproveTeacher } from '@/api/user'
 import Sticky from '@/components/Sticky'
-import router from '@/router'
 export default {
   components: { Sticky },
   filters: {
@@ -112,25 +88,17 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
-      getList(this.listQuery).then(response => {
-        this.list = response.data.items
+      getUncheckTeacherList().then(response => {
+        this.list = response.data.list
         this.listLoading = false
       })
     },
     searchClick() {
       alert('搜索' + this.input)
     },
-    createClick() {
-      router.push({ name: 'coursecreate' })
-    },
-    editClick(row) {
-      router.push({ name: 'coursemodify' })
-    },
-    shareClick(row) {
-      router.push({ name: 'coursechapter' })
-    },
-    deleteClick(row) {
-      alert('点击了删除')
+    approveClick(row) {
+      console.log(row)
+      ApproveTeacher()
     }
   }
 }

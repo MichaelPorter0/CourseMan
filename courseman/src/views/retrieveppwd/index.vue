@@ -1,76 +1,50 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+    <el-form ref="RetrievepPwdForm" :model="RetrievepPwdForm" :rules="RetrievepPwdRules" class="login-form" auto-complete="on" label-position="left">
       <h3 class="title">围棋课程管理</h3>
-      <el-form-item prop="username">
+      <el-form-item prop="email">
         <span class="svg-container">
-          <svg-icon icon-class="user" />
+          <svg-icon icon-class="邮箱" />
         </span>
-        <el-input v-model="loginForm.username" name="username" type="text" auto-complete="on" placeholder="username" />
-      </el-form-item>
-      <el-form-item prop="password">
-        <span class="svg-container">
-          <svg-icon icon-class="password" />
-        </span>
-        <el-input
-          :type="pwdType"
-          v-model="loginForm.password"
-          name="password"
-          auto-complete="on"
-          placeholder="password"
-          @keyup.enter.native="handleLogin" />
-        <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="pwdType === 'password' ? 'eye' : 'eye-open'" />
-        </span>
+        <el-input v-model="RetrievepPwdForm.email" name="email" type="text" auto-complete="on" placeholder="请输入您的邮箱" />
       </el-form-item>
       <el-form-item>
-        <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
-          登录
+        <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="handleRetrievepPwd">
+          找回密码
         </el-button>
       </el-form-item>
       <el-form-item>
-        <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="register">
-          注册
+        <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="BacktoLogin">
+          返回
         </el-button>
 
       </el-form-item>
- 
 
     </el-form>
   </div>
 </template>
 
 <script>
-import { isvalidUsername } from '@/utils/validate'
-
+import { isvalidEmail } from '@/utils/validate'
+import { retrieveppwd } from '@/api/user'
 export default {
-  name: 'Login',
+  name: 'Rretrieveppwd',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
-        callback(new Error('请输入正确的用户名'))
-      } else {
+    const validEmail = (rule, value, callback) => {
+      if (isvalidEmail(value)) {
         callback()
-      }
-    }
-    const validatePass = (rule, value, callback) => {
-      if (value.length < 5) {
-        callback(new Error('密码不能小于5位'))
       } else {
-        callback()
+        callback(new Error('这不是一个合格的邮箱格式'))
       }
     }
     return {
-      loginForm: {
-        username: '',
-        password: ''
+      RetrievepPwdForm: {
+        email: ''
       },
-      loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePass }]
+      RetrievepPwdRules: {
+        email: [{ required: true, trigger: 'blur', validator: validEmail }]
       },
       loading: false,
-      pwdType: 'password',
       redirect: undefined
     }
   },
@@ -90,13 +64,18 @@ export default {
         this.pwdType = 'password'
       }
     },
-    handleLogin() {
-      this.$refs.loginForm.validate(valid => {
+    handleRetrievepPwd() {
+      this.$refs.RetrievepPwdForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('Login', this.loginForm).then(() => {
+          retrieveppwd(this.RetrievepPwdForm).then((data) => {
             this.loading = false
-            this.$router.push({ path: this.redirect || '/' })
+            this.$message({
+              message: '请前往您的邮箱根据提示找回您的密码',
+              type: 'success',
+              center: true,
+              duration: 10 * 1000
+            })
           }).catch(() => {
             this.loading = false
           })
@@ -106,8 +85,24 @@ export default {
         }
       })
     },
-    register() {
-      console.log('error submit!!')
+    // handleLogin() {
+    //   this.$refs.loginForm.validate(valid => {
+    //     if (valid) {
+    //       this.loading = true
+    //       this.$store.dispatch('Login', this.loginForm).then(() => {
+    //         this.loading = false
+    //         this.$router.push({ path: this.redirect || '/' })
+    //       }).catch(() => {
+    //         this.loading = false
+    //       })
+    //     } else {
+    //       console.log('error submit!!')
+    //       return false
+    //     }
+    //   })
+    // },
+    BacktoLogin() {
+      this.$router.push({ path: '/login' })
     }
   }
 }

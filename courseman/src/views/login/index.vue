@@ -2,11 +2,11 @@
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
       <h3 class="title">围棋课程管理</h3>
-      <el-form-item prop="username">
+      <el-form-item prop="email">
         <span class="svg-container">
-          <svg-icon icon-class="user" />
+          <svg-icon icon-class="邮箱" />
         </span>
-        <el-input v-model="loginForm.username" name="username" type="text" auto-complete="on" placeholder="username" />
+        <el-input v-model="loginForm.email" name="email" type="text" auto-complete="on" placeholder="邮箱" />
       </el-form-item>
       <el-form-item prop="password">
         <span class="svg-container">
@@ -17,7 +17,7 @@
           v-model="loginForm.password"
           name="password"
           auto-complete="on"
-          placeholder="password"
+          placeholder="密码"
           @keyup.enter.native="handleLogin" />
         <span class="show-pwd" @click="showPwd">
           <svg-icon :icon-class="pwdType === 'password' ? 'eye' : 'eye-open'" />
@@ -43,32 +43,33 @@
 </template>
 
 <script>
-import { isvalidUsername } from '@/utils/validate'
-
+import { isvalidEmail } from '@/utils/validate'
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
-        callback(new Error('请输入正确的用户名'))
+    const validateEmail = (rule, value, callback) => {
+      if (!isvalidEmail(value)) {
+        callback(new Error('请输入正确的邮箱'))
       } else {
         callback()
       }
     }
     const validatePass = (rule, value, callback) => {
       if (value.length < 5) {
-        callback(new Error('密码不能小于5位'))
+        callback(new Error('密码太短了!'))
+      } else if (value.length > 20) {
+        callback(new Error('密码太长了!'))
       } else {
         callback()
       }
     }
     return {
       loginForm: {
-        username: '',
+        email: '',
         password: ''
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        email: [{ required: true, trigger: 'blur', validator: validateEmail }],
         password: [{ required: true, trigger: 'blur', validator: validatePass }]
       },
       loading: false,
@@ -112,7 +113,7 @@ export default {
       this.$router.push({ name: 'register' })
     },
     Retrievepassword() {
-      console.log('error submit!!')
+      this.$router.push({ name: 'retrieveppwd' })
     }
   }
 }

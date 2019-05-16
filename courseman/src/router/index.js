@@ -25,6 +25,7 @@ import Layout from '../views/layout/Layout'
 export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/register', name: 'register', component: () => import('@/views/register/index'), hidden: true },
+  { path: '/retrieveppwd', name: 'retrieveppwd', component: () => import('@/views/retrieveppwd/index'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
 
   {
@@ -39,6 +40,25 @@ export const constantRouterMap = [
       component: () => import('@/views/dashboard/index'),
       meta: { title: '主页', icon: 'dashboard ' }
     }]
+  },
+  {
+    path: '/teacher',
+    component: Layout,
+    meta: { title: '老师管理', icon: '老师' },
+    children: [
+      {
+        path: 'list',
+        name: 'teacherlist',
+        component: () => import('@/views/teacher/list/index'),
+        meta: { title: '老师列表', icon: '列表' }
+      },
+      {
+        path: 'unchecklist',
+        name: 'uncheckteacherlist',
+        component: () => import('@/views/teacher/uncheckedlist/index'),
+        meta: { title: '审核老师', icon: '审核' }
+      }
+    ]
   },
   {
     path: '/course',
