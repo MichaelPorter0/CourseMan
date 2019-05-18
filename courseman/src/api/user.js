@@ -41,7 +41,7 @@ export function retrieveppwd(data) {
 }
 
 /**
- * 找回密码
+ * 获取个人信息
  * @param {*} data
  */
 export function getInfo() {
@@ -67,7 +67,7 @@ export function getTeacherList() {
  */
 export function getUncheckTeacherList() {
   return request({
-    url: 'user/information/get-info',
+    url: 'user/account/teacher-list-not-check',
     method: 'post'
   })
 }

@@ -1,16 +1,20 @@
 import request from '@/utils/request'
 
-export function getList(params) {
+export function getCodeList(params) {
   return request({
-    url: '/activation/list',
-    method: 'get',
+    url: '/code/list',
+    method: 'post',
     params
   })
 }
-export function create(params) {
+/**
+ * 创建一个激活码
+ * @param {*} data
+ */
+export function CreateCode(data) {
   return request({
-    url: '/activation/create',
-    method: 'get',
-    params
+    url: '/code/add',
+    method: 'post',
+    data
   })
 }

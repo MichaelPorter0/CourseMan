@@ -1,16 +1,45 @@
 import request from '@/utils/request'
-
-export function getList(params) {
+import { ToFormData } from '@/utils/toformdata'
+/**
+ * 获取课程列表
+ * @param {*} data
+ */
+export function getCourseList() {
   return request({
-    url: '/course/list',
-    method: 'get',
-    params
+    url: '/course/list-all',
+    method: 'post'
   })
 }
-export function fetchList(query) {
+/**
+ * 获取课程详细信息
+ * @param {*} course_id
+ */
+export function getDetail(data) {
   return request({
-    url: '/course/videolist',
+    url: '/course/info',
+    method: 'post',
+    data,
+    transformRequest: [ToFormData]
+  })
+}
+
+/**
+ * 获取课程课节的信息
+ * @param {*} id
+ */
+export function getChapter(data) {
+  return request({
+    url: '/class/info',
+    method: 'post',
+    data,
+    transformRequest: [ToFormData]
+  })
+}
+
+export function fetchList(params) {
+  return request({
+    url: '/course/info',
     method: 'get',
-    params: query
+    params
   })
 }

@@ -3,59 +3,98 @@
     <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container">
       <div class="createPost-main-container">
         <el-row>
-          <Warning />
-
+          <!-- <Warning /> -->
           <el-col :span="24">
+            <el-form-item style="margin-bottom: 10px;" prop="courseID">
+              课程序号: {{ getcourseForm.course_id }}
+            </el-form-item>
             <el-form-item style="margin-bottom: 40px;" prop="title">
-              <MDinput v-model="postForm.title" :maxlength="100" name="name" required>
-                Title
+              <MDinput v-model="postForm.name" :maxlength="100" name="name" required>
+                课程名称
               </MDinput>
             </el-form-item>
-
             <div class="postInfo-container">
               <el-row>
                 <el-col :span="8">
-                  <el-form-item label-width="60px" label="Author:" class="postInfo-container-item">
-                    <el-select v-model="postForm.author" :remote-method="getRemoteUserList" filterable default-first-option remote placeholder="Search user">
-                      <el-option v-for="(item,index) in userListOptions" :key="item+index" :label="item" :value="item" />
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-
-                <el-col :span="10">
-                  <el-form-item label-width="120px" label="Publush Time:" class="postInfo-container-item">
-                    <el-date-picker v-model="postForm.display_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="Select date and time" />
-                  </el-form-item>
-                </el-col>
-
-                <el-col :span="6">
-                  <el-form-item label-width="90px" label="Importance:" class="postInfo-container-item">
-                    <el-rate
-                      v-model="postForm.importance"
-                      :max="3"
-                      :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
-                      :low-threshold="1"
-                      :high-threshold="3"
-                      style="margin-top:8px;"
+                  <el-form-item label-width="60px" label="标签" class="postInfo-container-item">
+                    <el-input
+                      v-model="postForm.catalog"
+                      type="text"
+                      placeholder="请输入内容"
+                      maxlength="10"
+                      show-word-limit
                     />
                   </el-form-item>
                 </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="24">
+                  <el-form-item label-width="120px" label="课程介绍" class="postInfo-container-item">
+                    <el-input
+                      :rows="8"
+                      v-model="postForm.introduction"
+                      type="textarea"
+                      maxlength="30"
+                      show-word-limit="true"
+                      placeholder="请输入课程介绍"/>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="6">
+                  <el-form-item label-width="120px" label="开始时间:" class="postInfo-container-item">
+                    <el-date-picker v-model="postForm.start_time" type="datetime" format="yyyy-MM-dd" placeholder="Select date and time" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="10">
+                  <el-form-item label-width="120px" label="结束时间:" class="postInfo-container-item">
+                    <el-date-picker v-model="postForm.end_time" type="datetime" format="yyyy-MM-dd" placeholder="Select date and time" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                  <el-form-item label-width="120px" label="是否可以体验" class="postInfo-container-item">
+                    <el-switch v-model="postForm.can_experience" :active-value="1" :inactive-value="0" />
+                  </el-form-item>
+                </el-col>
+
+                <el-row>
+                  <el-col :span="24">
+                    <el-form-item label-width="60px" label="链接" class="postInfo-container-item">
+                      <el-input
+                        v-model="postForm.experience_url"
+                        type="text"
+                        placeholder="请输入内容"
+                        maxlength="10"
+                        show-word-limit
+                      />
+                    </el-form-item>
+                  </el-col>
+                </el-row>
               </el-row>
             </div>
           </el-col>
         </el-row>
 
-        <el-form-item style="margin-bottom: 40px;" label-width="70px" label="Summary:">
-          <el-input v-model="postForm.content_short" :rows="1" type="textarea" class="article-textarea" autosize placeholder="Please enter the content" />
-          <span v-show="contentShortLength" class="word-counter">{{ contentShortLength }}words</span>
-        </el-form-item>
-
-        <el-form-item prop="content" style="margin-bottom: 30px;">
-          <Tinymce ref="editor" v-model="postForm.content" :height="400" />
-        </el-form-item>
-
         <el-form-item prop="image_uri" style="margin-bottom: 30px;">
-          <Upload v-model="postForm.image_uri" />
+          <el-upload
+            ref="upload"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :on-progress="progressing"
+            :file-list="fileList"
+            :auto-upload="false"
+            :http-request="uploadfile"
+            class="upload-demo"
+            action="">
+            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+          </el-upload>
+        </el-form-item>
+        <el-form-item prop="image_uri" style="margin-bottom: 30px;">
+          <el-button :disabled="uploading" style="margin-left: 10px;" size="small" type="success" @click="confirmButton">
+            <label v-if="uploading">请耐心等待文件上传完成</label>
+            <label v-else>修改信息</label>
+          </el-button>
         </el-form-item>
       </div>
     </el-form>
@@ -68,33 +107,26 @@ import Upload from '@/components/Upload/SingleImage3'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { validURL } from '@/utils/validate'
-import { fetchArticle } from '@/api/article'
+import { getDetail } from '@/api/course'
+import { upLoadFile } from '@/api/video'
 import { searchUser } from '@/api/remote-search'
 import Warning from './Warning'
 
 const defaultForm = {
   status: 'draft',
-  title: '', // 文章题目
-  content: '', // 文章内容
-  content_short: '', // 文章摘要
-  source_uri: '', // 文章外链
-  image_uri: '', // 文章图片
-  display_time: undefined, // 前台展示时间
-  id: undefined,
-  platforms: ['a-platform'],
-  comment_disabled: false,
-  importance: 0
+  id: '',
+  name: '',
+  catalog: '',
+  introduction: '',
+  start_time: '',
+  end_time: '',
+  can_experience: '1',
+  experience_url: ''
 }
 
 export default {
-  name: 'ArticleDetail',
+  name: 'CourseDetail',
   components: { Tinymce, MDinput, Upload, Sticky, Warning },
-  props: {
-    isEdit: {
-      type: Boolean,
-      default: false
-    }
-  },
   data() {
     const validateRequire = (rule, value, callback) => {
       if (value === '') {
@@ -123,7 +155,16 @@ export default {
       }
     }
     return {
+      fileList: [],
+      uploading: false,
       postForm: Object.assign({}, defaultForm),
+      getcourseForm: {
+        course_id: ''
+      },
+      fileForm: {
+        asset: 'vedio',
+        file: null
+      },
       loading: false,
       userListOptions: [],
       rules: {
@@ -136,48 +177,29 @@ export default {
     }
   },
   computed: {
-    contentShortLength() {
-      return this.postForm.content_short.length
-    },
+    // contentShortLength() {
+    //   return this.postForm.content_short.length
+    // },
     lang() {
       return this.$store.getters.language
     }
   },
   created() {
-    if (this.isEdit) {
-      const id = this.$route.params && this.$route.params.id
-      this.fetchData(id)
-    } else {
-      this.postForm = Object.assign({}, defaultForm)
-    }
-
-    // Why need to make a copy of this.$route here?
-    // Because if you enter this page and quickly switch tag, may be in the execution of the setTagsViewTitle function, this.$route is no longer pointing to the current page
-    // https://github.com/PanJiaChen/vue-element-admin/issues/1221
     this.tempRoute = Object.assign({}, this.$route)
+    this.getcourseForm.course_id = this.$route.params.course_id
+    this.fetchData(this.getcourseForm)
   },
   methods: {
-    fetchData(id) {
-      fetchArticle(id).then(response => {
-        this.postForm = response.data
+    fetchData(getcourseForm) {
+      getDetail(getcourseForm).then(response => {
+        this.postForm = response.data.info
         // Just for test
-        this.postForm.title += `   Article Id:${this.postForm.id}`
-        this.postForm.content_short += `   Article Id:${this.postForm.id}`
-
-        // Set tagsview title
-        this.setTagsViewTitle()
       }).catch(err => {
         console.log(err)
       })
     },
-    setTagsViewTitle() {
-      const title = this.lang === 'zh' ? '编辑文章' : 'Edit Article'
-      const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.postForm.id}` })
-      this.$store.dispatch('tagsView/updateVisitedView', route)
-    },
     submitForm() {
       this.postForm.display_time = parseInt(this.display_time / 1000)
-      console.log(this.postForm)
       this.$refs.postForm.validate(valid => {
         if (valid) {
           this.loading = true
@@ -196,7 +218,7 @@ export default {
       })
     },
     draftForm() {
-      if (this.postForm.content.length === 0 || this.postForm.title.length === 0) {
+      if (this.postForm.introduction.length === 0 || this.postForm.title.name === 0) {
         this.$message({
           message: '请填写必要的标题和内容',
           type: 'warning'
@@ -216,6 +238,41 @@ export default {
         if (!response.data.items) return
         this.userListOptions = response.data.items.map(v => v.name)
       })
+    },
+    submitUpload() {
+      this.$refs.upload.submit()
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList)
+    },
+    handlePreview(file) {
+      console.log(file)
+    },
+    uploadfile(param) {
+      this.fileForm.file = param.file
+      this.uploading = true
+      upLoadFile(this.fileForm).then(response => {
+        this.uploading = false
+        this.postForm.experience_url = response.data.url
+        this.$notify({
+          title: '成功',
+          message: '文件' + name + '上传成功',
+          type: 'success',
+          duration: 0
+        })
+      }).catch(response => {
+        this.$notify.error({
+          title: '错误',
+          message: '文件' + name + '上传失败',
+          duration: 0
+        })
+      })
+    },
+    progressing(event, file, fileList) {
+      console.log(event)
+    },
+    confirmButton() {
+      console.log(1)
     }
   }
 }

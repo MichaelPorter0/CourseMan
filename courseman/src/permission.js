@@ -3,25 +3,25 @@ import store from './store'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { Message } from 'element-ui'
-import { getToken } from '@/utils/auth' // getToken from cookie
+import { getToken, getRole } from '@/utils/auth' // getToken from cookie
 
 NProgress.configure({ showSpinner: false })// NProgress configuration
 
 const whiteList = ['/login', '/register', '/retrieveppwd'] // 不重定向白名单
 router.beforeEach((to, from, next) => {
   NProgress.start()
-  console.log('token ' + getToken())
+  // console.log('token ' + getToken())
   if (getToken()) {
     if (to.path === '/login') {
       next({ path: '/' })
       NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
     } else {
-      console.log('store ' + store.getters.name.length)
+      // console.log('store ' + store.getters.name.length)
       if (store.getters.name.length === 0) {
-        console.log('我要拉数据了')
+        // console.log('我要拉数据了')
         store.dispatch('GetInfo').then(res => { // 拉取用户信息
           // next()
-          const roles = res.data.roles // note: roles must be a array! such as: ['editor','develop']
+          const roles = getRole() // note: roles must be a array! such as: ['editor','develop']
           store.dispatch('GenerateRoutes', { roles }).then(() => { // 根据roles权限生成可访问的路由表
             router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
             next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
@@ -33,7 +33,7 @@ router.beforeEach((to, from, next) => {
           })
         })
       } else {
-        console.log('我要1234拉数据了')
+        // console.log('我要1234拉数据了')
         next()
       }
     }

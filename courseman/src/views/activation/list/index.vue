@@ -6,39 +6,38 @@
           <el-input v-model="input" name="searchinput" prefix-icon="el-icon-search" placeholder="请输入内容" width="20px"/>
         </el-col>
         <el-button class="search" type="primary" icon="el-icon-search" round @click="searchClick()">搜索</el-button>
-        <el-button type="primary" icon="el-icon-edit-outline" round @click="createClick()">新建</el-button>
       </sticky>
     </div>
     <el-table
       v-loading="listLoading"
-      :data="list"
+      :data="searchData"
       element-loading-text="Loading"
       border
       fit
       highlight-current-row>
       <el-table-column align="center" label="ID" width="95">
         <template slot-scope="scope">
-          {{ scope.$index }}
+          {{ scope.row.id }}
         </template>
       </el-table-column>
       <el-table-column label="激活码">
         <template slot-scope="scope">
-          {{ scope.row.content }}
+          {{ scope.row.activation_code }}
         </template>
       </el-table-column>
       <el-table-column align="center" label="课程ID" width="95">
         <template slot-scope="scope">
-          {{ scope.row.courseID }}
+          {{ scope.row.course_id }}
         </template>
       </el-table-column>
       <el-table-column align="center" label="提取老师" width="95">
         <template slot-scope="scope">
-          {{ scope.row.teacher }}
+          {{ scope.row.teacherInfo.nickname }}
         </template>
       </el-table-column>
       <el-table-column class-name="status-col" label="状态" width="110" align="center">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.be_used | statusFilter">{{ scope.row.be_used }}</el-tag>
+          <el-tag :type="scope.row.is_used | statusFilter">{{ scope.row.is_used }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="提取时间" width="200">
@@ -52,7 +51,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/activation'
+import { getCodeList } from '@/api/activation'
 import Sticky from '@/components/Sticky'
 import router from '@/router'
 export default {
@@ -60,8 +59,8 @@ export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
-        used: 'success',
-        unused: 'danger'
+        1: 'success',
+        0: 'danger'
       }
       return statusMap[status]
     }
@@ -73,22 +72,32 @@ export default {
       input: ''
     }
   },
+  computed: {
+    searchData: function() {
+      var search = this.input
+      if (search) {
+        return this.list.filter(function(product) {
+          return Object.keys(product).some(function(key) {
+            return String(product[key]).toLowerCase().indexOf(search) > -1
+          })
+        })
+      }
+      return this.list
+    }
+  },
   created() {
     this.fetchData()
   },
   methods: {
     fetchData() {
       this.listLoading = true
-      getList(this.listQuery).then(response => {
-        this.list = response.data.items
+      getCodeList().then(response => {
+        this.list = response.data.list
         this.listLoading = false
       })
     },
     searchClick() {
       alert('搜索' + this.input)
-    },
-    createClick() {
-      router.push({ name: 'coursecreate' })
     },
     editClick(row) {
       router.push({ name: 'coursemodify' })

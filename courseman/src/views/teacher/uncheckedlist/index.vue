@@ -17,7 +17,7 @@
       highlight-current-row>
       <el-table-column align="center" label="ID" width="95">
         <template slot-scope="scope">
-          {{ scope.$id }}
+          {{ scope.row.id }}
         </template>
       </el-table-column>
       <el-table-column label="邮箱">
@@ -39,7 +39,7 @@
         <template slot-scope="scope">
           <el-button-group>
             <el-tooltip class="item" effect="dark" content="批准" placement="top-start">
-              <el-button type="primary" icon="el-icon-edit" @click="approveClick(scope.row)" />
+              <el-button type="primary" icon="el-icon-check" @click="approveClick(scope.row)" />
             </el-tooltip>
           </el-button-group>
         </template>
@@ -89,6 +89,7 @@ export default {
     fetchData() {
       this.listLoading = true
       getUncheckTeacherList().then(response => {
+        console.log('asdf')
         this.list = response.data.list
         this.listLoading = false
       })

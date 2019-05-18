@@ -1,22 +1,26 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name:{{ name }}</div>
-    <div class="dashboard-text">roles:{{ roles }}</div>
-    <div class="dashboard-text">introduction:{{ introduction }}</div>
-    <div class="dashboard-text">device:{{ device }}</div>
+    <div class="dashboard-text">欢迎您! {{ name }}</div>
+    <div class="dashboard-text">您的权限是:{{ role }}</div>
+    <div class="dashboard-text">您的联系方式:{{ phone }}</div>
+    <div class="dashboard-text">登录设备:{{ device }}</div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-
+import { getRole } from '@/utils/auth'
 export default {
   name: 'Dashboard',
+  data() {
+    return {
+      role: getRole()
+    }
+  },
   computed: {
     ...mapGetters([
       'name',
-      'roles',
-      'introduction',
+      'phone',
       'device'
     ])
   }

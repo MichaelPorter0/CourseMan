@@ -78,14 +78,14 @@ export const constantRouterMap = [
         meta: { title: '创建课程', icon: 'form' }
       },
       {
-        path: 'modify',
+        path: 'modify/:course_id',
         name: 'coursemodify',
         component: () => import('@/views/course/modify/index'),
         meta: { title: '修改', icon: 'form' },
         hidden: true
       },
       {
-        path: 'chapter',
+        path: 'chapter/:course_id',
         name: 'coursechapter',
         component: () => import('@/views/course/chapter/index'),
         hidden: true
@@ -158,13 +158,6 @@ export const constantRouterMap = [
         name: 'activationlist',
         component: () => import('@/views/activation/list/index'),
         meta: { title: '提取历史', icon: '历史' }
-      },
-      {
-        path: 'extract:course',
-        name: 'activationextract',
-        hidden: true,
-        component: () => import('@/views/activation/extract/index'),
-        meta: { title: '提取激活码' }
       }
     ]
   }

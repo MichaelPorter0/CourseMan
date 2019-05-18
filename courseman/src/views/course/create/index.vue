@@ -41,7 +41,19 @@
         </el-form-item>
 
         <el-form-item prop="image_uri" style="margin-bottom: 30px;">
-          <Upload v-model="postForm.image_uri" />
+          <el-upload
+            ref="upload"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :on-progress="progressing"
+            :file-list="fileList"
+            :auto-upload="false"
+            class="upload-demo"
+            action="https://jsonplaceholder.typicode.com/posts/">
+            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+            <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+          </el-upload>
         </el-form-item>
       </div>
     </el-form>
@@ -109,6 +121,7 @@ export default {
       }
     }
     return {
+      fileList: [],
       postForm: Object.assign({}, defaultForm),
       loading: false,
       userListOptions: [],
@@ -136,10 +149,6 @@ export default {
     } else {
       this.postForm = Object.assign({}, defaultForm)
     }
-
-    // Why need to make a copy of this.$route here?
-    // Because if you enter this page and quickly switch tag, may be in the execution of the setTagsViewTitle function, this.$route is no longer pointing to the current page
-    // https://github.com/PanJiaChen/vue-element-admin/issues/1221
     this.tempRoute = Object.assign({}, this.$route)
   },
   methods: {
@@ -202,6 +211,9 @@ export default {
         if (!response.data.items) return
         this.userListOptions = response.data.items.map(v => v.name)
       })
+    },
+    progressing(event, file, fileList) {
+      console.log(event)
     }
   }
 }

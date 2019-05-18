@@ -17,7 +17,7 @@
       highlight-current-row>
       <el-table-column align="center" label="ID" width="95">
         <template slot-scope="scope">
-          {{ scope.$id }}
+          {{ scope.row.id }}
         </template>
       </el-table-column>
       <el-table-column label="邮箱">

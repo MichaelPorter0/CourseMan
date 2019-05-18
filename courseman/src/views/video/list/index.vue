@@ -18,7 +18,7 @@
       highlight-current-row>
       <el-table-column align="center" label="ID" width="95">
         <template slot-scope="scope">
-          {{ scope.$index }}
+          {{ scope.row.id }}
         </template>
       </el-table-column>
       <el-table-column label="视频名称">
@@ -28,7 +28,7 @@
       </el-table-column>
       <el-table-column label="视频地址">
         <template slot-scope="scope">
-          {{ scope.row.url }}
+          {{ scope.row.url.url }}
         </template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="操作" width="200">
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/video'
+import { getVideoList } from '@/api/video'
 import Sticky from '@/components/Sticky'
 import router from '@/router'
 export default {
@@ -73,8 +73,8 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
-      getList(this.listQuery).then(response => {
-        this.list = response.data.items
+      getVideoList(this.listQuery).then(response => {
+        this.list = response.data.list
         this.listLoading = false
       })
     },
