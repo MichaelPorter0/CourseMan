@@ -36,6 +36,18 @@ export function getChapter(data) {
   })
 }
 
+/**
+ * 获取课程课节的信息
+ * @param {*} id
+ */
+export function updateCourse(data) {
+  return request({
+    url: '/course/update',
+    method: 'post',
+    data,
+    transformRequest: [ToFormData]
+  })
+}
 export function fetchList(params) {
   return request({
     url: '/course/info',

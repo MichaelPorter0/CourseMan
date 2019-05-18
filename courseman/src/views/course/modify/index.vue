@@ -106,21 +106,18 @@ import Tinymce from '@/components/Tinymce'
 import Upload from '@/components/Upload/SingleImage3'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
-import { validURL } from '@/utils/validate'
-import { getDetail } from '@/api/course'
+import { getDetail, updateCourse } from '@/api/course'
 import { upLoadFile } from '@/api/video'
-import { searchUser } from '@/api/remote-search'
 import Warning from './Warning'
-
+// import router from '@/router'
 const defaultForm = {
-  status: 'draft',
-  id: '',
+  course_id: '',
   name: '',
   catalog: '',
   introduction: '',
   start_time: '',
   end_time: '',
-  can_experience: '1',
+  can_experience: 0,
   experience_url: ''
 }
 
@@ -139,21 +136,7 @@ export default {
         callback()
       }
     }
-    const validateSourceUri = (rule, value, callback) => {
-      if (value) {
-        if (validURL(value)) {
-          callback()
-        } else {
-          this.$message({
-            message: '外链url填写不正确',
-            type: 'error'
-          })
-          callback(new Error('外链url填写不正确'))
-        }
-      } else {
-        callback()
-      }
-    }
+
     return {
       fileList: [],
       uploading: false,
@@ -168,18 +151,13 @@ export default {
       loading: false,
       userListOptions: [],
       rules: {
-        image_uri: [{ validator: validateRequire }],
         title: [{ validator: validateRequire }],
-        content: [{ validator: validateRequire }],
-        source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
+        content: [{ validator: validateRequire }]
       },
       tempRoute: {}
     }
   },
   computed: {
-    // contentShortLength() {
-    //   return this.postForm.content_short.length
-    // },
     lang() {
       return this.$store.getters.language
     }
@@ -192,51 +170,18 @@ export default {
   methods: {
     fetchData(getcourseForm) {
       getDetail(getcourseForm).then(response => {
-        this.postForm = response.data.info
+        this.postForm.course_id = response.data.info.id
+        this.postForm.name = response.data.info.name
+        this.postForm.catalog = response.data.info.catalog
+        this.postForm.introduction = response.data.info.introduction
+        this.postForm.start_time = response.data.info.start_time
+        this.postForm.end_time = response.data.info.end_time
+        console.log(this.postForm.start_time)
+        this.postForm.can_experience = response.data.info.can_experience
+        this.postForm.experience_url = response.data.info.experience_url
         // Just for test
       }).catch(err => {
         console.log(err)
-      })
-    },
-    submitForm() {
-      this.postForm.display_time = parseInt(this.display_time / 1000)
-      this.$refs.postForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          this.$notify({
-            title: '成功',
-            message: '发布文章成功',
-            type: 'success',
-            duration: 2000
-          })
-          this.postForm.status = 'published'
-          this.loading = false
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
-    draftForm() {
-      if (this.postForm.introduction.length === 0 || this.postForm.title.name === 0) {
-        this.$message({
-          message: '请填写必要的标题和内容',
-          type: 'warning'
-        })
-        return
-      }
-      this.$message({
-        message: '保存成功',
-        type: 'success',
-        showClose: true,
-        duration: 1000
-      })
-      this.postForm.status = 'draft'
-    },
-    getRemoteUserList(query) {
-      searchUser(query).then(response => {
-        if (!response.data.items) return
-        this.userListOptions = response.data.items.map(v => v.name)
       })
     },
     submitUpload() {
@@ -272,8 +217,34 @@ export default {
       console.log(event)
     },
     confirmButton() {
-      console.log(1)
+      this.$confirm('你确定修改课程"' + this.postForm.name + '"的信息', '确认', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        center: true
+      }).then(() => {
+        updateCourse(this.postForm).then(response => {
+          this.$notify({
+            title: '成功',
+            message: '课程:' + this.postForm.name + ' 信息修改成功',
+            type: 'success',
+            duration: 0
+          }).catch(response => {
+            this.$notify.error({
+              title: '错误',
+              message: '课程' + this.postForm.name + '信息修改失败',
+              duration: 0
+            })
+          })
+          // router.push({ path: 'list/' })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
     }
+
   }
 }
 </script>

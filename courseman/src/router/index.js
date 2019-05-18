@@ -88,7 +88,15 @@ export const constantRouterMap = [
         path: 'chapter/:course_id',
         name: 'coursechapter',
         component: () => import('@/views/course/chapter/index'),
-        hidden: true
+        hidden: true,
+        children: [{
+          path: 'create',
+          name: 'createchapter',
+          // component: () => import('@/views/course/chapter/create/index'),
+          component: () => import('@/views/course/create/index'),
+          hidden: true
+        }]
+
       }
     ]
   },

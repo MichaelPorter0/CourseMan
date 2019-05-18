@@ -40,7 +40,13 @@
           <el-button-group>
             <el-tooltip class="item" effect="dark" content="批准" placement="top-start">
               <el-button type="primary" icon="el-icon-check" @click="approveClick(scope.row)" />
+
             </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="拒绝" placement="top-start">
+              <el-button type="primary" icon="el-icon-close" @click="disapproveClick(scope.row)" />
+
+            </el-tooltip>
+
           </el-button-group>
         </template>
       </el-table-column>
@@ -89,7 +95,6 @@ export default {
     fetchData() {
       this.listLoading = true
       getUncheckTeacherList().then(response => {
-        console.log('asdf')
         this.list = response.data.list
         this.listLoading = false
       })
@@ -98,8 +103,20 @@ export default {
       alert('搜索' + this.input)
     },
     approveClick(row) {
-      console.log(row)
-      ApproveTeacher()
+      var postForm = {
+        content: [{ 'id': row.id, 'pass': 1 }]
+      }
+
+      console.log(typeof (postForm.content))
+      ApproveTeacher(postForm)
+    },
+    disapproveClick(row) {
+      var postForm = {
+        content: [{ 'id': row.id, 'pass': 0 }]
+      }
+
+      console.log(typeof (postForm.content))
+      ApproveTeacher(postForm)
     }
   }
 }

@@ -2,6 +2,7 @@
   <div class="tab-container">
     <el-tag>mounted times ：{{ createdTimes }}</el-tag>
     <el-alert :closable="false" style="width:200px;display:inline-block;vertical-align: middle;margin-left:30px;" title="Tab with keep-alive" type="success" />
+    <el-button type="primary" icon="el-icon-edit" circle title="添加课节" @click="createChapter"/>
     <el-tabs v-model="activeName" style="margin-top:15px;" type="border-card">
       <el-tab-pane v-for="item in tabMapOptions" :key="item.key" :label="item.label" :name="item.label">
         <keep-alive>
@@ -40,18 +41,20 @@ export default {
     fetchData(getcourseForm) {
       getDetail(getcourseForm).then(response => {
         var classlist = response.data.info.classList
-        // this.activeName = classlist[0].id
         for (var i = 0, l = classlist.length; i < l; i++) {
           var tablist = {}
           tablist['label'] = '第' + i + '节'
-          // tablist['label'] = classlist[i].id
           tablist['key'] = classlist[i].id
-
           this.tabMapOptions.push(tablist)
         }
       }).catch(err => {
         console.log(err)
       })
+    },
+    createChapter() {
+      console.log('路由变了')
+      this.$router.push({ name: 'createchapter' })
+      // router.push({ name: 'createchapter' })
     }
   }
 }

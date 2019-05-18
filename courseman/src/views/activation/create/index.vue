@@ -96,8 +96,6 @@ export default {
           }
 
           )
-
-          // router.push({ name: 'activationextract', params: { course: this.value }})
         }).catch(() => {
           this.$message({
             type: 'info',

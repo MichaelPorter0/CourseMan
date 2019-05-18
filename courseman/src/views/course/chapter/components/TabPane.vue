@@ -25,19 +25,16 @@
     <el-table-column min-width="300px" label="视频名称">
       <template slot-scope="{row}">
         <span>{{ row.vedio.title }}</span>
-
       </template>
     </el-table-column>
     <el-table-column min-width="300px" label="视频描述">
       <template slot-scope="{row}">
         <span>{{ row.vedio.content }}</span>
-
       </template>
     </el-table-column>
     <el-table-column min-width="300px" label="视频URL">
       <template slot-scope="{row}">
         <span>{{ row.vedio.url }}</span>
-
       </template>
     </el-table-column>
   </el-table>
@@ -81,7 +78,6 @@ export default {
       // this.$emit('create') // for test
       getChapter(this.idForm).then(response => {
         this.list = response.data.info.vedioList
-        console.log(response.data.info.id)
         console.log(response.data.info)
         this.loading = false
       })

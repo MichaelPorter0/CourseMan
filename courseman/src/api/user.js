@@ -76,9 +76,11 @@ export function getUncheckTeacherList() {
  * 审核老师账号
  * @param {*}
  */
-export function ApproveTeacher() {
+export function ApproveTeacher(data) {
   return request({
     url: 'user/account/check',
-    method: 'post'
+    method: 'post',
+    data,
+    transformRequest: [ToFormData]
   })
 }
