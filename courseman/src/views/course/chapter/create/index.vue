@@ -6,7 +6,11 @@
 
 <script>
 export default {
-  name: 'Dashboard'
+  name: 'Dashboard',
+  created() {
+    alert('创建课节')
+    console.log('创建课节')
+  }
 }
 </script>
 

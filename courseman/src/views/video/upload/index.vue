@@ -38,13 +38,29 @@
             <div class="el-upload__tip">{{ loadingFile }}</div>
           </el-col>
           <el-col :span="5" :offset="10">
-            <el-progress :text-inside="true" :stroke-width="18" :percentage="loadprogress"/>
-          </el-col>
-          <el-col :span="5" :offset="10">
             <div class="el-upload__tip"> 请您耐心等待文件上传完成后再离开本页</div>
           </el-col>
         </el-row>
+        <el-row>
+          <el-input v-model="PostForm.title" placeholder="请输入内容"/>
+        </el-row>
+        <el-row>
+          <el-input
+            v-model="PostForm.content"
+            type="textarea"
+            placeholder="请输入内容"
+            maxlength="30"
+            show-word-limit
+          />
+        </el-row>
 
+        <el-row>
+          <el-link :href="PostForm.url" name="nb" type="primary"/>
+          <el-tag>{{ PostForm.url }}</el-tag>
+        </el-row>
+        <!-- <el-row>
+          <el-link type="primary">{{ PostForm.img }}</el-link>
+        </el-row> -->
       </el-main>
     </el-container>
 
@@ -52,13 +68,22 @@
 </template>
 
 <script>
-import { client } from '@/utils/alioss'
-
+import { upLoadFile } from '@/api/video'
 export default {
   data() {
     return {
       loadprogress: 0,
-      loadingFile: '没有文件正在上传'
+      loadingFile: '没有文件正在上传',
+      FileUploadForm: {
+        asset: 'vedio',
+        file: null
+      },
+      PostForm: {
+        url: '',
+        title: '',
+        content: '',
+        img: ''
+      }
     }
   },
   methods: {
@@ -66,33 +91,25 @@ export default {
       this.$refs.upload.submit()
     },
     uploadfile(param) {
-      console.log(param.file.name)
-      var that = this
-      async function load(name, file) {
-        try {
-          const result = await client.multipartUpload(name, file, {
-            progress: async function(p, checkpoint) {
-              that.loadprogress = Math.floor(p * 100)
-              that.loadingFile = name
-            }
-          })
-          that.$notify({
-            title: '成功',
-            message: '文件' + name + '上传成功',
-            type: 'success',
-            duration: 0
-
-          })
-          console.log(result)
-        } catch (e) {
-          that.$notify.error({
-            title: '错误',
-            message: '文件' + name + '上传失败',
-            duration: 0
-          })
-        }
-      }
-      load(param.file.name, param.file)
+      this.FileUploadForm.file = param.file
+      this.loadingFile = param.file.name + '正在上传'
+      upLoadFile(this.FileUploadForm).then(response => {
+        this.PostForm.url = response.data.url
+        this.loadingFile = '没有文件正在上传'
+        this.$notify({
+          title: '成功',
+          message: '文件' + name + '上传成功',
+          type: 'success',
+          duration: 0
+        })
+      }).catch(response => {
+        this.loadingFile = '文件完成上传'
+        this.$notify.error({
+          title: '错误',
+          message: '文件' + name + '上传失败',
+          duration: 0
+        })
+      })
     },
     beforeRemove(file, fileList) {
       return this.$confirm(`确定移除 ${file.name}？`)

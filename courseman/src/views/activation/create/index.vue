@@ -67,13 +67,22 @@ export default {
       this.listLoading = true
       getCourseList(this.listQuery).then(response => {
         var list = response.data.list
-        for (let index = 0; index < list.length; index++) {
+        if (list.length === 0) {
           const option = {
-            value: list[index].id,
-            label: '班级' + list[index].id
+            value: '',
+            label: '没有班级可以选择'
           }
           this.options.push(option)
+        } else {
+          for (let index = 0; index < list.length; index++) {
+            const option = {
+              value: list[index].id,
+              label: '班级' + list[index].id
+            }
+            this.options.push(option)
+          }
         }
+
         this.listLoading = false
       })
     },
@@ -88,8 +97,6 @@ export default {
           center: true
         }).then(() => {
           this.postForm.course_id = this.value
-          console.log(this.postForm)
-
           CreateCode(this.postForm).then(response => {
             this.step = false
             this.code = response.data.code
