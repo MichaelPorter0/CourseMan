@@ -111,6 +111,7 @@ export const constantRouterMap = [
     children: [
       {
         path: 'list',
+        name: 'videouplist',
         component: () => import('@/views/video/list'),
         meta: { title: '视频列表', icon: '列表' }
       },
@@ -119,6 +120,12 @@ export const constantRouterMap = [
         name: 'videoupload',
         component: () => import('@/views/video/upload'),
         meta: { title: '视频上传', icon: 'upload' }
+      },
+      {
+        path: 'uploadlist',
+        name: 'videolistupload',
+        component: () => import('@/views/video/uploadlist'),
+        meta: { title: '批量上传', icon: '批量上传' }
       },
       {
         path: 'detail',

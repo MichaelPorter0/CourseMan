@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-// import { ToFormData } from '@/utils/toformdata'
+import { ToFormData } from '@/utils/toformdata'
 export function getVideoList() {
   return request({
     url: '/vedio/list',
@@ -24,5 +24,31 @@ export function upLoadFile(data) {
     contentType: false,
     mimeType: 'multipart/form-data'
     // transformRequest: [ToFormData]
+  })
+}
+/**
+ * 把文件信息存入数据库
+ * @param {*} data
+ */
+export function addToVideoList(data) {
+  return request({
+    url: '/vedio/upload',
+    method: 'post',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded ' },
+    data,
+    transformRequest: [ToFormData]
+  })
+}
+/**
+ * 删除某个视频
+ * @param {*} data
+ */
+export function deleteVideo(data) {
+  return request({
+    url: '/vedio/delete',
+    method: 'post',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded ' },
+    data,
+    transformRequest: [ToFormData]
   })
 }

@@ -37,7 +37,12 @@
     "window.title": "${dirty}${activeEditorMedium}${separator}${rootName}",
     "editor.codeLens": true,
     "editor.snippetSuggestions": "top",
-
+    // # 指定终端的字体 (注意名字要完全符合font名）
+    // "terminal.integrated.fontFamily": "Meslo LG S DZ Regular for Powerline",
+    "terminal.integrated.fontFamily": "Meslo LG M DZ for Powerline",
+    
+    // # 指定终端字大小
+    "terminal.integrated.fontSize": 13
 
     // "vscode_custom_css.imports": [
         

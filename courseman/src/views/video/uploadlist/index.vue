@@ -15,7 +15,7 @@
               :http-request="uploadfile"
               :auto-upload="false"
               :before-remove="beforeRemove"
-              :limit="1"
+              :limit="5"
               :on-exceed="handleExceed"
               action=""
               class="upload-demo"
@@ -43,29 +43,8 @@
             <div class="el-upload__tip"> 请您耐心等待文件上传完成后再离开本页</div>
           </el-col>
         </el-row>
-
-        <el-form ref="PostForm" :model="PostForm" class="login-form" auto-complete="on" label-position="left">
-
-          <el-form-item prop="email">
-            视频内容：
-            <el-input v-model="PostForm.title" placeholder="请输入内容"/>
-          </el-form-item>
-          <el-form-item prop="password">
-            视频介绍：
-            <el-input
-              v-model="PostForm.content"
-              type="textarea"
-              placeholder="请输入内容"
-              maxlength="30"
-              show-word-limit
-            />
-          </el-form-item>
-        </el-form>
         <el-row>
-          <el-tag>{{ PostForm.url }}</el-tag>
-        </el-row>
-        <el-row>
-          <el-button type="primary" @click="addToVideoList">确认上传</el-button>
+          <div>所有文件的名称和内容都将以文件名称命名</div>
         </el-row>
       </el-main>
     </el-container>
@@ -75,7 +54,7 @@
 
 <script>
 import { upLoadFile, addToVideoList } from '@/api/video'
-import router from '@/router'
+// import router from '@/router'
 export default {
   data() {
     return {
@@ -95,7 +74,7 @@ export default {
   },
   methods: {
     submitUpload() {
-      this.$confirm('确认上传这个文件到服务器吗?', '提示', {
+      this.$confirm('确认上传文件到服务器吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -120,15 +99,23 @@ export default {
         this.loadingFile = '没有文件正在上传'
         this.$notify({
           title: '成功',
-          message: '文件' + name + '上传成功',
+          message: '文件' + param.file.name + '上传成功',
           type: 'success',
           duration: 0
         })
+        this.PostForm.title = param.file.name
+        this.PostForm.content = param.file.name
+        addToVideoList(this.PostForm).then((response) => {
+          this.$message({
+            type: 'success',
+            message: '添加成功!'
+          })
+        })
       }).catch(response => {
-        this.loadingFile = '文件' + name + '完成上传'
+        this.loadingFile = '文件' + param.file.name + '完成上传'
         this.$notify.error({
           title: '错误',
-          message: '文件' + name + '上传失败',
+          message: '文件' + param.file.name + '上传失败',
           duration: 0
         })
       })
@@ -152,29 +139,8 @@ export default {
         })
       })
     },
-    addToVideoList() {
-      this.$confirm(`确定把这个视频添加到视频列表中吗？`).then(() => {
-        if (this.PostForm.title.length === 0) {
-          this.PostForm.title = this.FileUploadForm.file.name
-        }
-        if (this.PostForm.content.length === 0) {
-          this.PostForm.content = this.FileUploadForm.file.name
-        }
-        addToVideoList(this.PostForm).then((response) => {
-          this.$message({
-            type: 'success',
-            message: '添加成功!'
-          })
-        })
-        router.push({ name: 'videouplist' })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消'
-        })
-      })
-    }, handleExceed(files, fileList) {
-      this.$message.warning(`当前限制选择 1 个文件`)
+    handleExceed(files, fileList) {
+      this.$message.warning(`当前限制选择 5 个文件`)
     }
   }
 }

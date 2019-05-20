@@ -26,6 +26,11 @@
           {{ scope.row.title }}
         </template>
       </el-table-column>
+      <el-table-column label="视频描述">
+        <template slot-scope="scope">
+          {{ scope.row.content }}
+        </template>
+      </el-table-column>
       <el-table-column label="视频地址">
         <template slot-scope="scope">
           {{ scope.row.url.url }}
@@ -35,7 +40,7 @@
         <template slot-scope="scope">
           <el-button-group>
             <el-button type="primary" icon="el-icon-edit" @click="editClick(scope.row)" />
-            <el-button type="primary" icon="el-icon-delete" @click="deleteClick(scope.row)" />
+            <el-button type="primary" icon="el-icon-delete" @click="deleteClick(scope.row.id)" />
           </el-button-group>
         </template>
 
@@ -45,7 +50,7 @@
 </template>
 
 <script>
-import { getVideoList } from '@/api/video'
+import { getVideoList, deleteVideo } from '@/api/video'
 import Sticky from '@/components/Sticky'
 import router from '@/router'
 export default {
@@ -90,8 +95,30 @@ export default {
     shareClick(row) {
       alert('点击了分享' + row)
     },
-    deleteClick(row) {
-      alert('点击了删除')
+    deleteClick(videoID) {
+      this.$confirm('删除这个视频(ID=' + videoID + ')吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        const PostForm = {
+          id: videoID
+        }
+        deleteVideo(PostForm).then(response => {
+          this.fetchData()
+          this.$message({
+            type: 'success',
+            message: '视频(ID=' + videoID + ')' + '删除成功!'
+          })
+        }
+
+        )
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
     }
   }
 }
