@@ -53,8 +53,9 @@
         </template>
       </el-table-column>
       <el-table-column class-name="status-col" label="是否可以试听" width="110" align="center">
+        <!-- {{ scope.row.can_experience }} -->
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.can_experience=1" :type="scope.row.can_experience | statusFilter">是</el-tag>
+          <el-tag v-if="scope.row.can_experience===1" :type="scope.row.can_experience | statusFilter">是</el-tag>
           <el-tag v-else :type="scope.row.can_experience | statusFilter">否</el-tag>
         </template>
       </el-table-column>

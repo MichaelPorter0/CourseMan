@@ -61,6 +61,30 @@ export function submitCourse(data) {
     transformRequest: [ToFormData]
   })
 }
+/**
+ * 新增课节
+ * @param {*} data
+ */
+export function submitClass(data) {
+  return request({
+    url: '/class/submit',
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    data
+  })
+}
+/**
+ * 修改课节
+ * @param {*} data
+ */
+export function updateClass(data) {
+  return request({
+    url: '/class/update',
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    data
+  })
+}
 export function fetchList(params) {
   return request({
     url: '/course/info',

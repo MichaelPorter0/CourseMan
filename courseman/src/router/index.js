@@ -158,8 +158,10 @@ export const constantRouterMap = [
     children: [
       {
         path: 'create',
+        name: 'homeworkpublish',
         component: () => import('@/views/homework/create'),
-        meta: { title: '作业发布', icon: '发布' }
+        meta: { title: '作业发布', icon: '发布' },
+        hidden: true
       },
       {
         path: 'list',

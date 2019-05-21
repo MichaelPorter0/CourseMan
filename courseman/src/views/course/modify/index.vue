@@ -2,78 +2,60 @@
   <div class="createPost-container">
     <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container">
       <div class="createPost-main-container">
-        <el-row>
-          <!-- <Warning /> -->
-          <el-col :span="24">
-            <el-form-item style="margin-bottom: 10px;" prop="courseID">
-              课程序号: {{ getcourseForm.course_id }}
-            </el-form-item>
-            <el-form-item style="margin-bottom: 40px;" prop="title">
-              <MDinput v-model="postForm.name" :maxlength="100" name="name" required>
-                课程名称
-              </MDinput>
-            </el-form-item>
-            <div class="postInfo-container">
-              <el-row>
-                <el-col :span="8">
-                  <el-form-item label-width="60px" label="标签" class="postInfo-container-item">
-                    <el-input
-                      v-model="postForm.catalog"
-                      type="text"
-                      placeholder="请输入内容"
-                      maxlength="10"
-                      show-word-limit
-                    />
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="24">
-                  <el-form-item label-width="120px" label="课程介绍" class="postInfo-container-item">
-                    <el-input
-                      :rows="8"
-                      v-model="postForm.introduction"
-                      type="textarea"
-                      maxlength="30"
-                      show-word-limit="true"
-                      placeholder="请输入课程介绍"/>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="6">
-                  <el-form-item label-width="120px" label="开始时间:" class="postInfo-container-item">
-                    <el-date-picker v-model="postForm.start_time" type="datetime" format="yyyy-MM-dd" placeholder="Select date and time" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="10">
-                  <el-form-item label-width="120px" label="结束时间:" class="postInfo-container-item">
-                    <el-date-picker v-model="postForm.end_time" type="datetime" format="yyyy-MM-dd" placeholder="Select date and time" />
-                  </el-form-item>
-                </el-col>
-                <el-col :span="6">
-                  <el-form-item label-width="120px" label="是否可以体验" class="postInfo-container-item">
-                    <el-switch v-model="postForm.can_experience" :active-value="1" :inactive-value="0" />
-                  </el-form-item>
-                </el-col>
 
-                <el-row>
-                  <el-col :span="24">
-                    <el-form-item label-width="60px" label="链接" class="postInfo-container-item">
-                      <el-input
-                        v-model="postForm.experience_url"
-                        type="text"
-                        placeholder="请输入内容"
-                        maxlength="10"
-                        show-word-limit
-                      />
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-row>
-            </div>
-          </el-col>
-        </el-row>
+        <el-form-item style="margin-bottom: 10px;" prop="courseID">
+          课程序号: {{ getcourseForm.course_id }}
+        </el-form-item>
+        <el-form-item style="margin-bottom: 40px;" prop="title">
+          <MDinput v-model="postForm.name" :maxlength="100" name="name" required>
+            课程名称
+          </MDinput>
+        </el-form-item>
+        <div class="postInfo-container">
+
+          <el-form-item label-width="60px" label="标签" class="postInfo-container-item">
+            <el-input
+              v-model="postForm.catalog"
+              type="text"
+              placeholder="请输入内容"
+              maxlength="10"
+              show-word-limit
+            />
+          </el-form-item>
+
+          <el-form-item label-width="120px" label="课程介绍" class="postInfo-container-item">
+            <el-input
+              :rows="8"
+              v-model="postForm.introduction"
+              type="textarea"
+              maxlength="30"
+              show-word-limit="true"
+              placeholder="请输入课程介绍"/>
+          </el-form-item>
+
+          <el-form-item label-width="120px" label="开始时间:" class="postInfo-container-item">
+            <el-date-picker v-model="postForm.start_time" type="datetime" format="yyyy-MM-dd" placeholder="Select date and time" />
+          </el-form-item>
+
+          <el-form-item label-width="120px" label="结束时间:" class="postInfo-container-item">
+            <el-date-picker v-model="postForm.end_time" type="datetime" format="yyyy-MM-dd" placeholder="Select date and time" />
+          </el-form-item>
+
+          <el-form-item label-width="120px" label="是否可以体验" class="postInfo-container-item">
+            <el-switch v-model="postForm.can_experience" :active-value="1" :inactive-value="0" />
+          </el-form-item>
+
+          <el-form-item label-width="60px" label="链接" class="postInfo-container-item">
+            <el-input
+              v-model="postForm.experience_url"
+              type="text"
+              placeholder="请输入内容"
+              maxlength="10"
+              show-word-limit
+            />
+          </el-form-item>
+
+        </div>
 
         <el-form-item prop="image_uri" style="margin-bottom: 30px;">
           <el-upload
@@ -222,20 +204,22 @@ export default {
         cancelButtonText: '取消',
         center: true
       }).then(() => {
+        console.log(this.postForm)
+
         updateCourse(this.postForm).then(response => {
+          this.$router.go(-1)
           this.$notify({
             title: '成功',
             message: '课程:' + this.postForm.name + ' 信息修改成功',
             type: 'success',
             duration: 0
-          }).catch(response => {
-            this.$notify.error({
-              title: '错误',
-              message: '课程' + this.postForm.name + '信息修改失败',
-              duration: 0
-            })
           })
-          // router.push({ path: 'list/' })
+        }).catch(response => {
+          this.$notify.error({
+            title: '错误',
+            message: '课程' + this.postForm.name + '信息修改失败',
+            duration: 0
+          })
         })
       }).catch(() => {
         this.$message({

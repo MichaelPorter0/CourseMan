@@ -46,7 +46,6 @@
 import { getCourseList } from '@/api/course'
 import { CreateCode } from '@/api/activation'
 import clip from '@/utils/clipboard'
-// import router from '@/router'
 export default {
   data() {
     return {
@@ -70,14 +69,14 @@ export default {
         if (list.length === 0) {
           const option = {
             value: '',
-            label: '没有班级可以选择'
+            label: '没有课程可以选择'
           }
           this.options.push(option)
         } else {
           for (let index = 0; index < list.length; index++) {
             const option = {
               value: list[index].id,
-              label: '班级' + list[index].id
+              label: '课程' + list[index].id
             }
             this.options.push(option)
           }

@@ -42,7 +42,8 @@
     "terminal.integrated.fontFamily": "Meslo LG M DZ for Powerline",
     
     // # 指定终端字大小
-    "terminal.integrated.fontSize": 13
+    "terminal.integrated.fontSize": 13,
+    "git.ignoreLimitWarning": true
 
     // "vscode_custom_css.imports": [
         

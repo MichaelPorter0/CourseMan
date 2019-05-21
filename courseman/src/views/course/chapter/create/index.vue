@@ -1,33 +1,52 @@
 <template>
   <div >
-    <el-input v-model="postForm.title" placeholder="请输入课节名称"/>
-    <el-input
-      v-model="postForm.intro"
-      type="textarea"
-      placeholder="请输入课节内容"
-      maxlength="30"
-      show-word-limit="true"
-    />
-    <el-row>
-      <el-transfer
-        :filter-method="filterMethod"
-        v-model="value"
-        :data="data"
-        :titles="['可选择视频列表','已选择的视频列表']"
-        filterable
-        filter-placeholder="请输入视频名称"/>
-      <el-button type="primary">创建</el-button>
-      <el-button type="primary" @click="EditButton">返回</el-button>
-    </el-row>
+    <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container">
+      <el-form-item style="margin-bottom: 40px;" prop="title">
+        <el-input v-model="postForm.title" placeholder="请输入课节名称"/>
+      </el-form-item>
+      <el-form-item style="margin-bottom: 40px;" prop="intro">
+        <el-input
+          v-model="postForm.intro"
+          type="textarea"
+          placeholder="请输入课节内容"
+          maxlength="30"
+          show-word-limit="true"
+        />
+      </el-form-item>
+
+      <el-row>
+        <el-transfer
+          :filter-method="filterMethod"
+          v-model="value"
+          :data="data"
+          :titles="['可选择视频列表','已选择的视频列表']"
+          filterable
+          filter-placeholder="请输入视频名称"/>
+        <el-button type="primary" @click="CreateButton">创建</el-button>
+        <el-button type="primary" @click="EditButton">返回</el-button>
+      </el-row>
+    </el-form>
   </div>
 </template>
 
 <script>
 // import { getChapter } from '@/api/course'
 import { getVideoList } from '@/api/video'
+import { submitClass } from '@/api/course'
 export default {
   name: 'Dashboard',
   data() {
+    const validateRequire = (rule, value, callback) => {
+      if (value === '') {
+        this.$message({
+          message: rule.field + '为必传项',
+          type: 'error'
+        })
+        callback(new Error(rule.field + '为必传项'))
+      } else {
+        callback()
+      }
+    }
     return {
       postForm: {
         course_id: '',
@@ -37,34 +56,22 @@ export default {
       },
       data: [],
       value: [],
+      rules: {
+        title: [{ validator: validateRequire }],
+        intro: [{ validator: validateRequire }]
+      },
       filterMethod(query, item) {
-        console.log(item)
         return item.label.indexOf(query) > -1
       }
     }
   },
   created() {
     this.getList()
-    console.log('创建课节' + this.$route.query.chapterID)
+    this.postForm.course_id = this.$route.query.chapterID
   },
   methods: {
     getList() {
       this.loading = true
-      // 获得课节的视频列表
-      // getChapter(this.idForm).then(response => {
-      //   // 视频列表,已选择的视频需要加入values
-      //   this.list = response.data.info.vedioList
-      //   for (let index = 0; index < this.list.length; index++) {
-      //     const element = this.list[index].vedio_id
-      //     this.value.push(element)
-      //   }
-      //   console.log(response.data.info)
-      //   this.chapterForm.title = response.data.info.title
-      //   // console.log(this.chapterForm.title)
-      //   this.chapterForm.intro = response.data.info.intro
-      //   this.loading = false
-      // })
-      // 获得视频列表
       getVideoList().then(response => {
         const lists = response.data.list
         for (let index = 0; index < lists.length; index++) {
@@ -76,13 +83,36 @@ export default {
         }
       })
     },
+    CreateButton() {
+      this.$refs.postForm.validate(valid => {
+        if (valid) {
+          this.postForm.vedio_ids = this.value
+          // submitCourse()
+          submitClass(this.postForm).then(response => {
+            this.$notify({
+              title: '成功',
+              message: '课节添加成功成功',
+              type: 'success',
+              duration: 5000
+            })
+            this.$router.go(-1)
+          })
+        } else {
+          this.$notify.error({
+            title: '错误',
+            message: '请完整填写',
+            duration: 0
+          })
+        }
+      })
+    },
     EditButton() {
       this.$confirm('确定要放弃创建吗?', '确认', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         center: true
       }).then(() => {
-        this.isEdit = true
+        this.$router.go(-1)
       }).catch(() => {
         this.$message({
           type: 'info',

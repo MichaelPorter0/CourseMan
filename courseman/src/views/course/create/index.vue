@@ -212,12 +212,13 @@ export default {
                 message: '课程:' + this.postForm.name + ' 创建成功',
                 type: 'success',
                 duration: 0
-              }).catch(response => {
-                this.$notify.error({
-                  title: '错误',
-                  message: '课程' + this.postForm.name + '创建失败',
-                  duration: 0
-                })
+              })
+              this.$router.go(-1)
+            }).catch(response => {
+              this.$notify.error({
+                title: '错误',
+                message: '课程' + this.postForm.name + '创建失败',
+                duration: 0
               })
             })
           }).catch(() => {

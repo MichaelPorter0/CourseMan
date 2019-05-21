@@ -41,6 +41,7 @@
       </el-collapse>
       <el-row >
         <el-button type="primary" icon="el-icon-edit" title="编辑此课节" circle @click="EditButton"/>
+        <el-button type="primary" icon="el-icon-document" title="发布本节作业" circle @click="PublishButton"/>
         <el-button type="danger" icon="el-icon-delete" title="删除此课节" circle/>
       </el-row>
     </div>
@@ -61,7 +62,7 @@
           :titles="['可选择视频列表','已选择的视频列表']"
           filterable
           filter-placeholder="请输入视频名称"/>
-        <el-button type="primary">确认修改</el-button>
+        <el-button type="primary" @click="CreateButton">确认修改</el-button>
         <el-button type="primary" @click="EditButton">返回</el-button>
       </el-row>
     </div>
@@ -69,7 +70,7 @@
 </template>
 
 <script>
-import { getChapter } from '@/api/course'
+import { getChapter, updateClass } from '@/api/course'
 import { getVideoList } from '@/api/video'
 export default {
   filters: {
@@ -97,8 +98,11 @@ export default {
         id: this.chapterid
       },
       chapterForm: {
+        id: '',
         title: '',
-        intro: ''
+        intro: '',
+        order: '0',
+        vedio_ids: ''
       },
       isEdit: true,
       data: [],
@@ -143,6 +147,25 @@ export default {
     },
     handleChange(val) {
       console.log(val)
+    },
+    CreateButton() {
+      this.chapterForm.id = this.chapterid
+      this.chapterForm.vedio_ids = this.value
+      // submitCourse()
+      updateClass(this.chapterForm).then(response => {
+        this.isEdit = true
+        this.$notify({
+          title: '成功',
+          message: '课节信息修改成功',
+          type: 'success',
+          duration: 5000
+        })
+      })
+    },
+    PublishButton() {
+      this.$router.push({ name: 'homeworkpublish', query: {
+        chapterID: this.chapterid
+      }})
     },
     EditButton() {
       if (this.isEdit) {
