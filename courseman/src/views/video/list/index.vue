@@ -90,7 +90,10 @@ export default {
       router.push({ name: 'videoupload' })
     },
     editClick(row) {
-      router.push({ name: 'videodetail' })
+      router.push({ name: 'videodetail',
+        query: {
+          url: row.url.url
+        }})
     },
     shareClick(row) {
       alert('点击了分享' + row)

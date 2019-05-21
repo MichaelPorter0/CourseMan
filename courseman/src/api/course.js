@@ -37,12 +37,25 @@ export function getChapter(data) {
 }
 
 /**
- * 获取课程课节的信息
+ * 更新课程课节的信息
  * @param {*} id
  */
 export function updateCourse(data) {
   return request({
     url: '/course/update',
+    method: 'post',
+    data,
+    transformRequest: [ToFormData]
+  })
+}
+
+/**
+ * 新增课程
+ * @param {*} data
+ */
+export function submitCourse(data) {
+  return request({
+    url: '/course/submit',
     method: 'post',
     data,
     transformRequest: [ToFormData]

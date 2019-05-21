@@ -3,43 +3,77 @@
     <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container">
       <div class="createPost-main-container">
         <el-row>
-          <Warning />
-
+          <!-- <Warning /> -->
           <el-col :span="24">
-            <el-form-item style="margin-bottom: 40px;" prop="title">
-              <MDinput v-model="postForm.title" :maxlength="100" name="name" required>
+            <el-form-item style="margin-bottom: 10px;">
+              创建一个新的课程
+            </el-form-item>
+            <el-form-item style="margin-bottom: 40px;" prop="name">
+              <MDinput v-model="postForm.name" :maxlength="100" name="name" required>
                 课程名称
               </MDinput>
             </el-form-item>
             <div class="postInfo-container">
               <el-row>
                 <el-col :span="8">
-                  <el-form-item label-width="60px" label="老师:" class="postInfo-container-item">
-                    <el-select v-model="postForm.author" filterable default-first-option remote placeholder="Search user">
-                      <el-option v-for="(item,index) in userListOptions" :key="item+index" :label="item" :value="item" />
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-
-                <el-col :span="10">
-                  <el-form-item label-width="120px" label="课程截止时间:" class="postInfo-container-item">
-                    <el-date-picker v-model="postForm.display_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="Select date and time" />
+                  <el-form-item label-width="60px" label="标签" prop="catalog" class="postInfo-container-item">
+                    <el-input
+                      v-model="postForm.catalog"
+                      type="text"
+                      placeholder="请输入内容"
+                      maxlength="10"
+                      show-word-limit
+                    />
                   </el-form-item>
                 </el-col>
               </el-row>
+              <el-row>
+                <el-col :span="24">
+                  <el-form-item label-width="120px" label="课程介绍" prop="introduction" class="postInfo-container-item">
+                    <el-input
+                      :rows="8"
+                      v-model="postForm.introduction"
+                      type="textarea"
+                      maxlength="30"
+                      show-word-limit="true"
+                      placeholder="请输入课程介绍"/>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="6">
+                  <el-form-item label-width="120px" label="开始时间:" prop="start_time" class="postInfo-container-item">
+                    <el-date-picker v-model="postForm.start_time" type="date" format="yyyy-MM-dd" value-format="yyyy.MM.dd" placeholder="Select date and time" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="10">
+                  <el-form-item label-width="120px" label="结束时间:" prop="end_time" class="postInfo-container-item">
+                    <el-date-picker v-model="postForm.end_time" type="date" format="yyyy-MM-dd" value-format="yyyy.MM.dd" placeholder="Select date and time" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                  <el-form-item label-width="120px" label="是否可以体验" class="postInfo-container-item">
+                    <el-switch v-model="postForm.can_experience" :active-value="1" :inactive-value="0" />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="24">
+                  <el-form-item label-width="60px" label="链接" class="postInfo-container-item">
+                    <el-input
+                      v-model="postForm.experience_url"
+                      type="text"
+                      placeholder="请输入内容"
+                      maxlength="10"
+                      show-word-limit
+                    />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
             </div>
           </el-col>
         </el-row>
-
-        <el-form-item style="margin-bottom: 40px;" label-width="90px" label="课程描述:">
-          <el-input v-model="postForm.content_short" :rows="1" type="textarea" class="article-textarea" autosize placeholder="Please enter the content" />
-          <span v-show="contentShortLength" class="word-counter">{{ contentShortLength }}words</span>
-        </el-form-item>
-
-        <el-form-item prop="content" style="margin-bottom: 30px;">
-          <Tinymce ref="editor" v-model="postForm.content" :height="400" />
-        </el-form-item>
-
         <el-form-item prop="image_uri" style="margin-bottom: 30px;">
           <el-upload
             ref="upload"
@@ -48,12 +82,18 @@
             :on-progress="progressing"
             :file-list="fileList"
             :auto-upload="false"
+            :http-request="uploadfile"
             class="upload-demo"
-            action="https://jsonplaceholder.typicode.com/posts/">
+            action="">
             <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
             <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-            <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
           </el-upload>
+        </el-form-item>
+        <el-form-item prop="image_uri" style="margin-bottom: 30px;">
+          <el-button :disabled="uploading" style="margin-left: 10px;" size="small" type="success" @click="confirmButton">
+            <label v-if="uploading">请耐心等待文件上传完成</label>
+            <label v-else>确认创建</label>
+          </el-button>
         </el-form-item>
       </div>
     </el-form>
@@ -64,35 +104,18 @@
 import Tinymce from '@/components/Tinymce'
 import Upload from '@/components/Upload/SingleImage3'
 import MDinput from '@/components/MDinput'
-
-import { validURL } from '@/utils/validate'
-import { fetchArticle } from '@/api/article'
+import Sticky from '@/components/Sticky' // 粘性header组件
+import { submitCourse } from '@/api/course'
+import { upLoadFile } from '@/api/video'
 import Warning from './Warning'
-
-const defaultForm = {
-  title: '', // 文章题目
-  content: '', // 文章内容
-  content_short: '', // 文章摘要
-  source_uri: '', // 文章外链
-  image_uri: '', // 文章图片
-  display_time: undefined, // 前台展示时间
-  id: undefined,
-  platforms: ['a-platform'],
-  comment_disabled: false,
-  importance: 0
-}
-
+// import router from '@/router'
 export default {
-  name: 'ArticleDetail',
-  components: { Tinymce, MDinput, Upload, Warning },
-  props: {
-    isEdit: {
-      type: Boolean,
-      default: false
-    }
-  },
+  name: 'CourseDetail',
+  components: { Tinymce, MDinput, Upload, Sticky, Warning },
   data() {
     const validateRequire = (rule, value, callback) => {
+      console.log(value)
+
       if (value === '') {
         this.$message({
           message: rule.field + '为必传项',
@@ -103,65 +126,114 @@ export default {
         callback()
       }
     }
-    const validateSourceUri = (rule, value, callback) => {
-      if (value) {
-        if (validURL(value)) {
-          callback()
-        } else {
-          this.$message({
-            message: '外链url填写不正确',
-            type: 'error'
-          })
-          callback(new Error('外链url填写不正确'))
-        }
-      } else {
-        callback()
-      }
-    }
+
     return {
       fileList: [],
-      postForm: Object.assign({}, defaultForm),
+      uploading: false,
+      postForm: {
+        name: '',
+        catalog: '',
+        introduction: '',
+        start_time: '',
+        end_time: '',
+        img: 'https://www.baidu.com/',
+        can_experience: 0,
+        experience_url: ''
+      },
+      value1: '',
+      fileForm: {
+        asset: 'vedio',
+        file: null
+      },
       loading: false,
       userListOptions: [],
       rules: {
-        image_uri: [{ validator: validateRequire }],
-        title: [{ validator: validateRequire }],
-        content: [{ validator: validateRequire }],
-        source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
+        name: [{ validator: validateRequire }],
+        catalog: [{ validator: validateRequire }],
+        introduction: [{ validator: validateRequire }],
+        start_time: [{ validator: validateRequire }],
+        end_time: [{ validator: validateRequire }]
+
       },
       tempRoute: {}
     }
   },
   computed: {
-    contentShortLength() {
-      return this.postForm.content_short.length
-    },
     lang() {
       return this.$store.getters.language
     }
   },
   created() {
-    if (this.isEdit) {
-      const id = this.$route.params && this.$route.params.id
-      this.fetchData(id)
-    } else {
-      this.postForm = Object.assign({}, defaultForm)
-    }
-    this.tempRoute = Object.assign({}, this.$route)
   },
   methods: {
-    fetchData(id) {
-      fetchArticle(id).then(response => {
-        this.postForm = response.data
-        // Just for test
-        this.postForm.title += `   Article Id:${this.postForm.id}`
-        this.postForm.content_short += `   Article Id:${this.postForm.id}`
-      }).catch(err => {
-        console.log(err)
+    submitUpload() {
+      this.$refs.upload.submit()
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList)
+    },
+    handlePreview(file) {
+      console.log(file)
+    },
+    uploadfile(param) {
+      this.fileForm.file = param.file
+      this.uploading = true
+      upLoadFile(this.fileForm).then(response => {
+        this.uploading = false
+        this.postForm.experience_url = response.data.url
+        this.$notify({
+          title: '成功',
+          message: '文件' + name + '上传成功',
+          type: 'success',
+          duration: 0
+        })
+      }).catch(response => {
+        this.$notify.error({
+          title: '错误',
+          message: '文件' + name + '上传失败',
+          duration: 0
+        })
       })
     },
     progressing(event, file, fileList) {
       console.log(event)
+    },
+    confirmButton() {
+      this.$refs.postForm.validate(valid => {
+        if (valid) {
+          this.$confirm('你确定修改课程"' + this.postForm.name + '"的信息', '确认', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            center: true
+          }).then(() => {
+            submitCourse(this.postForm).then(response => {
+              this.$notify({
+                title: '成功',
+                message: '课程:' + this.postForm.name + ' 创建成功',
+                type: 'success',
+                duration: 0
+              }).catch(response => {
+                this.$notify.error({
+                  title: '错误',
+                  message: '课程' + this.postForm.name + '创建失败',
+                  duration: 0
+                })
+              })
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消'
+            })
+          })
+        } else {
+          this.$notify.error({
+            title: '错误',
+            message: '请完整填写所有信息',
+            duration: 0
+          })
+        }
+      })
     }
   }
 }

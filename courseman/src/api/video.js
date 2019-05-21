@@ -52,3 +52,16 @@ export function deleteVideo(data) {
     transformRequest: [ToFormData]
   })
 }
+/**
+ * 获取某个视频
+ * @param {*} data
+ */
+export function downloadprivate(data) {
+  return request({
+    url: '/common/upload/download-private',
+    method: 'post',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded ' },
+    data,
+    transformRequest: [ToFormData]
+  })
+}

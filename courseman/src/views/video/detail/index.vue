@@ -43,6 +43,7 @@
 
 <script>
 import './custom-theme.css'
+import { downloadprivate } from '@/api/video'
 export default {
   data() {
     return {
@@ -55,7 +56,7 @@ export default {
         playbackRates: [0.7, 1.0, 1.5, 2.0],
         sources: [{
           type: 'video/mp4',
-          src: 'http://dxytest.oss-cn-beijing.aliyuncs.com/%E8%A7%86%E9%A2%9113%E5%88%86%E9%92%9F.mp4?Expires=1557674831&OSSAccessKeyId=TMP.AgGuW4Iak2RCAAcPTyiAVpa1ezlvKJAlr_allJZnKVSYWDrQ2q33SC0yihlCADAtAhR93ncTj9PG1rBksQLEe-FFyHOciQIVANzAWbsXCxb4EACJRCCJkeXkBuy4&Signature=DjLSP4%2F46YcB4Xfq2d%2BxstalAWY%3D'
+          src: ''
           // src: 'http://dxytest.oss-cn-beijing.aliyuncs.com/%E8%A7%86%E9%A2%912%E5%88%86%E9%92%9F.mp4?Expires=1557674806&OSSAccessKeyId=TMP.AgGuW4Iak2RCAAcPTyiAVpa1ezlvKJAlr_allJZnKVSYWDrQ2q33SC0yihlCADAtAhR93ncTj9PG1rBksQLEe-FFyHOciQIVANzAWbsXCxb4EACJRCCJkeXkBuy4&Signature=m%2BPgLs3cmsUlh3jez1nOSd%2BRxN0%3D'
         }],
         poster: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg'
@@ -71,20 +72,19 @@ export default {
     // console.log('this is current player instance object', this.player)
     setTimeout(() => {
       console.log('dynamic change options', this.player)
-      // change src
-      // this.playerOptions.sources[0].src = 'https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm';
-      // change item
-      // this.$set(this.playerOptions.sources, 0, {
-      //   type: "video/mp4",
-      //   src: 'https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm',
-      // })
-      // change array
-      // this.playerOptions.sources = [{
-      //   type: "video/mp4",
-      //   src: 'https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm',
-      // }]
       this.player.muted(false)
     }, 5000)
+  },
+  created() {
+    const pubUrl = this.$route.query.url
+    const data = {
+      url: pubUrl
+    }
+    downloadprivate(data).then(response => {
+      console.log(this.playerOptions.sources)
+      this.playerOptions.sources[0].src = response.data.downloadUrl
+      console.log(this.playerOptions.sources.src)
+    })
   },
   methods: {
     // listen event

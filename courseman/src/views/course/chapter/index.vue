@@ -52,9 +52,10 @@ export default {
       })
     },
     createChapter() {
-      // console.log('创建课节')
-      console.log('路由变了')
-      this.$router.push({ name: 'createchapter' })
+      this.$router.push({ name: 'chaptercreate', query: {
+        chapterID: this.getcourseForm.course_id
+      }})
+
       // router.push({ name: 'createchapter' })
     }
   }
