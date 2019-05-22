@@ -59,7 +59,7 @@ export default {
           src: ''
           // src: 'http://dxytest.oss-cn-beijing.aliyuncs.com/%E8%A7%86%E9%A2%912%E5%88%86%E9%92%9F.mp4?Expires=1557674806&OSSAccessKeyId=TMP.AgGuW4Iak2RCAAcPTyiAVpa1ezlvKJAlr_allJZnKVSYWDrQ2q33SC0yihlCADAtAhR93ncTj9PG1rBksQLEe-FFyHOciQIVANzAWbsXCxb4EACJRCCJkeXkBuy4&Signature=m%2BPgLs3cmsUlh3jez1nOSd%2BRxN0%3D'
         }],
-        poster: 'https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg'
+        poster: 'logo.png'
       }
     }
   },

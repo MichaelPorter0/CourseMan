@@ -1,30 +1,44 @@
 <template>
-  <div >
-    <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container">
-      <el-form-item style="margin-bottom: 40px;" prop="title">
-        <el-input v-model="postForm.title" placeholder="请输入课节名称"/>
-      </el-form-item>
-      <el-form-item style="margin-bottom: 40px;" prop="intro">
-        <el-input
-          v-model="postForm.intro"
-          type="textarea"
-          placeholder="请输入课节内容"
-          maxlength="30"
-          show-word-limit="true"
-        />
-      </el-form-item>
+  <div class="createPost-container">
+    <el-form ref="postForm" :model="postForm" :rules="rules" label-position="left">
+      <div class="createPost-main-container">
+        <el-row type="flex" justify="center">
+          <el-col :span="8">
+            <el-form-item label="课节名称: " prop="title">
+              <el-input v-model="postForm.title" placeholder="请输入课节名称"/>
+            </el-form-item>
+          </el-col>
+        </el-row>
 
-      <el-row>
-        <el-transfer
-          :filter-method="filterMethod"
-          v-model="value"
-          :data="data"
-          :titles="['可选择视频列表','已选择的视频列表']"
-          filterable
-          filter-placeholder="请输入视频名称"/>
-        <el-button type="primary" @click="CreateButton">创建</el-button>
-        <el-button type="primary" @click="EditButton">返回</el-button>
-      </el-row>
+        <el-row type="flex" justify="center">
+          <el-col :span="8">
+            <el-form-item style="margin-bottom: 40px;" label="课节介绍: " prop="intro">
+              <el-input
+                v-model="postForm.intro"
+                :rows="5"
+                type="textarea"
+                placeholder="请输入课节内容(限制50个字以内)"
+                maxlength="50"
+                show-word-limit="true"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row type="flex" justify="center" style="margin-bottom: 40px;">
+          <el-transfer
+            :filter-method="filterMethod"
+            v-model="value"
+            :data="data"
+            :titles="['可选择视频列表','已选择的视频列表']"
+            filterable
+            filter-placeholder="请输入视频名称"/>
+
+        </el-row>
+        <el-row type="flex" justify="center">
+          <el-button type="primary" @click="CreateButton">创建</el-button>
+          <el-button type="primary" @click="EditButton">返回</el-button>
+        </el-row>
+      </div>
     </el-form>
   </div>
 </template>
@@ -88,15 +102,22 @@ export default {
         if (valid) {
           this.postForm.vedio_ids = this.value
           // submitCourse()
-          submitClass(this.postForm).then(response => {
-            this.$notify({
-              title: '成功',
-              message: '课节添加成功成功',
-              type: 'success',
-              duration: 5000
+          if (this.postForm.vedio_ids.length === 1) {
+            submitClass(this.postForm).then(response => {
+              this.$notify({
+                title: '成功',
+                message: '课节添加成功成功',
+                type: 'success',
+                duration: 5000
+              })
+              this.$router.go(-1)
             })
-            this.$router.go(-1)
-          })
+          } else {
+            this.$message({
+              type: 'error',
+              message: '你只能选择一个且必须选择一个视频'
+            })
+          }
         } else {
           this.$notify.error({
             title: '错误',
@@ -125,14 +146,40 @@ export default {
 }
 </script>
 
-<style rel="stylesheet/scss" lang="scss" scoped>
-.dashboard {
-  &-container {
-    margin: 30px;
+<style lang="scss" scoped>
+@import "~@/styles/mixin.scss";
+
+.createPost-container {
+  position: relative;
+  .createPost-main-container {
+    padding: 40px 45px 20px 50px;
+
+    .postInfo-container {
+      position: relative;
+      @include clearfix;
+      margin-bottom: 10px;
+
+      .postInfo-container-item {
+        float: left;
+      }
+    }
   }
-  &-text {
-    font-size: 30px;
-    line-height: 46px;
+
+  .word-counter {
+    width: 40px;
+    position: absolute;
+    right: 10px;
+    top: 0px;
+  }
+}
+
+.article-textarea /deep/ {
+  textarea {
+    padding-right: 40px;
+    resize: none;
+    border: none;
+    border-radius: 0px;
+    border-bottom: 1px solid #bfcbd9;
   }
 }
 </style>

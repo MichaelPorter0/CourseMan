@@ -21,7 +21,7 @@
           {{ scope.row.id }}
         </template>
       </el-table-column>
-      <el-table-column label="课程名称">
+      <el-table-column label="课程名称" width="110">
         <template slot-scope="scope">
           {{ scope.row.name }}
         </template>
@@ -31,9 +31,9 @@
           <span>{{ scope.row.teacher.nickname }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="课程介绍" width="110" align="center">
+      <el-table-column label="课程简介" width="440" align="center">
         <template slot-scope="scope">
-          {{ scope.row.introduction }}
+          {{ scope.row.short_introduction }}
         </template>
       </el-table-column>
       <el-table-column label="课程类别" width="110" align="center">
@@ -53,7 +53,6 @@
         </template>
       </el-table-column>
       <el-table-column class-name="status-col" label="是否可以试听" width="110" align="center">
-        <!-- {{ scope.row.can_experience }} -->
         <template slot-scope="scope">
           <el-tag v-if="scope.row.can_experience===1" :type="scope.row.can_experience | statusFilter">是</el-tag>
           <el-tag v-else :type="scope.row.can_experience | statusFilter">否</el-tag>
@@ -66,7 +65,7 @@
               <el-button type="primary" icon="el-icon-edit" @click="editClick(scope.row.id)" />
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="编辑课程内容" placement="top-start">
-              <el-button type="primary" icon="el-icon-share" @click="shareClick(scope.row.id)" />
+              <el-button type="primary" icon="el-icon-s-unfold" @click="shareClick(scope.row.id)" />
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="删除此课程" placement="top-start">
               <el-button type="primary" icon="el-icon-delete" @click="deleteClick(scope.row)" />
@@ -138,7 +137,7 @@ export default {
       router.push({ path: 'chapter/' + row })
     },
     deleteClick(row) {
-      alert('点击了删除')
+      alert('现在还不能删除课程')
     }
   }
 }

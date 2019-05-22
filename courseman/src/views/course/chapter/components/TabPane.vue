@@ -36,7 +36,8 @@
       <el-collapse v-model="activeNames" @change="handleChange">
         <el-collapse-item title=" 课节信息" name="1">
           <h1>{{ chapterForm.title }}</h1>
-          <div>{{ chapterForm.intro }}</div>
+          <a>{{ chapterForm.intro }}</a>
+
         </el-collapse-item>
       </el-collapse>
       <el-row >
@@ -51,7 +52,7 @@
         v-model="chapterForm.intro"
         type="textarea"
         placeholder="请输入课节内容"
-        maxlength="30"
+        maxlength="300"
         show-word-limit="true"
       />
       <el-row>
@@ -152,15 +153,22 @@ export default {
       this.chapterForm.id = this.chapterid
       this.chapterForm.vedio_ids = this.value
       // submitCourse()
-      updateClass(this.chapterForm).then(response => {
-        this.isEdit = true
-        this.$notify({
-          title: '成功',
-          message: '课节信息修改成功',
-          type: 'success',
-          duration: 5000
+      if (this.chapterForm.vedio_ids.length === 1) {
+        updateClass(this.chapterForm).then(response => {
+          this.isEdit = true
+          this.$notify({
+            title: '成功',
+            message: '课节信息修改成功',
+            type: 'success',
+            duration: 5000
+          })
         })
-      })
+      } else {
+        this.$message({
+          type: 'error',
+          message: '你只能选择一个且必须选择一个视频'
+        })
+      }
     },
     PublishButton() {
       this.$router.push({ name: 'homeworkpublish', query: {
