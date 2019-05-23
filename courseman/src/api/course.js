@@ -85,6 +85,18 @@ export function updateClass(data) {
     data
   })
 }
+/**
+ * 修改删除课节
+ * @param {*} data
+ */
+export function deleteChapter(data) {
+  return request({
+    url: '/class/delete',
+    method: 'post',
+    data,
+    transformRequest: [ToFormData]
+  })
+}
 export function fetchList(params) {
   return request({
     url: '/course/info',

@@ -34,16 +34,24 @@
     </el-table>
     <div v-if="isEdit">
       <el-collapse v-model="activeNames" @change="handleChange">
-        <el-collapse-item title=" 课节信息" name="1">
+        <el-collapse-item title="课节信息" name="1">
           <h1>{{ chapterForm.title }}</h1>
           <a>{{ chapterForm.intro }}</a>
-
+        </el-collapse-item>
+        <el-collapse-item title="课前作业" name="2">
+          <h1>{{ chapterForm.title }}</h1>
+          <a>{{ chapterForm.intro }}</a>
+        </el-collapse-item>
+        <el-collapse-item title="课后作业" name="3">
+          <h1>{{ chapterForm.title }}</h1>
+          <a>{{ chapterForm.intro }}</a>
         </el-collapse-item>
       </el-collapse>
       <el-row >
         <el-button type="primary" icon="el-icon-edit" title="编辑此课节" circle @click="EditButton"/>
         <el-button type="primary" icon="el-icon-document" title="发布本节作业" circle @click="PublishButton"/>
-        <el-button type="danger" icon="el-icon-delete" title="删除此课节" circle/>
+        <el-button type="primary" icon="el-icon-tickets" title="查看学生作业" circle @click="HomeListButton"/>
+        <el-button type="danger" icon="el-icon-delete" title="删除此课节" circle @click="DeleteButton"/>
       </el-row>
     </div>
     <div v-else>
@@ -71,7 +79,7 @@
 </template>
 
 <script>
-import { getChapter, updateClass } from '@/api/course'
+import { getChapter, updateClass, deleteChapter } from '@/api/course'
 import { getVideoList } from '@/api/video'
 export default {
   filters: {
@@ -170,7 +178,14 @@ export default {
         })
       }
     },
+    HomeListButton() {
+      this.$router.push({ name: 'homeworklist', query: {
+        chapterID: this.chapterid
+      }})
+    },
     PublishButton() {
+      console.log(11)
+
       this.$router.push({ name: 'homeworkpublish', query: {
         chapterID: this.chapterid
       }})
@@ -192,6 +207,37 @@ export default {
           })
         })
       }
+    },
+    DeleteButton() {
+      console.log(this.chapterid)
+      this.$confirm('确定要删除吗?', '确认', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        center: true
+      }).then(() => {
+        const data = {
+          id: this.chapterid
+        }
+        deleteChapter(data).then(response => {
+          this.$notify({
+            title: '成功',
+            message: '课节删除成功,请您手动刷新本页面',
+            type: 'success',
+            duration: 5000
+          })
+          this.getList()
+        }).catch(() => {
+          this.$notify.error({
+            title: '错误',
+            message: '课节删除失败'
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
     }
   }
 }

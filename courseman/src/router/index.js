@@ -41,25 +41,7 @@ export const constantRouterMap = [
       meta: { title: '主页', icon: 'dashboard ' }
     }]
   },
-  {
-    path: '/teacher',
-    component: Layout,
-    meta: { title: '老师管理', icon: '老师' },
-    children: [
-      {
-        path: 'list',
-        name: 'teacherlist',
-        component: () => import('@/views/teacher/list/index'),
-        meta: { title: '老师列表', icon: '列表' }
-      },
-      {
-        path: 'unchecklist',
-        name: 'uncheckteacherlist',
-        component: () => import('@/views/teacher/uncheckedlist/index'),
-        meta: { title: '审核老师', icon: '审核' }
-      }
-    ]
-  },
+
   {
     path: '/course',
     component: Layout,
@@ -153,7 +135,7 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/homework',
     name: 'Homework',
-    hidden: false,
+    hidden: true,
     meta: { title: '作业管理', icon: '作业' },
     children: [
       {
@@ -165,8 +147,15 @@ export const constantRouterMap = [
       },
       {
         path: 'list',
+        name: 'homeworklist',
         component: () => import('@/views/homework/list'),
         meta: { title: '作业检查', icon: '检查指标' }
+      },
+      {
+        path: 'detail',
+        name: 'homeworkdatail',
+        component: () => import('@/views/homework/detail')
+
       }
     ]
   },
@@ -213,6 +202,25 @@ export const asyncRouterMap = [
         name: 'announcement',
         component: () => import('@/views/miniprogram/announcement/index'),
         meta: { title: '通知管理', icon: '通知' }
+      }
+    ]
+  },
+  {
+    path: '/teacher',
+    component: Layout,
+    meta: { title: '老师管理', icon: '老师', roles: ['admin'] },
+    children: [
+      {
+        path: 'list',
+        name: 'teacherlist',
+        component: () => import('@/views/teacher/list/index'),
+        meta: { title: '老师列表', icon: '列表' }
+      },
+      {
+        path: 'unchecklist',
+        name: 'uncheckteacherlist',
+        component: () => import('@/views/teacher/uncheckedlist/index'),
+        meta: { title: '审核老师', icon: '审核' }
       }
     ]
   },

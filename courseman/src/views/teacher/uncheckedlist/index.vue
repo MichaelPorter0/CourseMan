@@ -39,11 +39,11 @@
         <template slot-scope="scope">
           <el-button-group>
             <el-tooltip class="item" effect="dark" content="批准" placement="top-start">
-              <el-button type="primary" icon="el-icon-check" @click="approveClick(scope.row)" />
+              <el-button type="primary" icon="el-icon-check" @click="approveClick(scope.row.id)" />
 
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="拒绝" placement="top-start">
-              <el-button type="primary" icon="el-icon-close" @click="disapproveClick(scope.row)" />
+              <el-button type="primary" icon="el-icon-close" @click="disapproveClick(scope.row.id)" />
 
             </el-tooltip>
 
@@ -72,7 +72,12 @@ export default {
     return {
       list: null,
       listLoading: true,
-      input: ''
+      input: '',
+      postForm: {
+        id: '',
+        pass: ''
+
+      }
     }
   },
   computed: {
@@ -102,21 +107,17 @@ export default {
     searchClick() {
       alert('搜索' + this.input)
     },
-    approveClick(row) {
-      var postForm = {
-        content: [{ 'id': row.id, 'pass': 1 }]
-      }
-
-      console.log(typeof (postForm.content))
-      ApproveTeacher(postForm)
+    approveClick(id) {
+      this.postForm.id = id
+      this.postForm.pass = 1
+      ApproveTeacher(this.postForm)
+      this.fetchData()
     },
-    disapproveClick(row) {
-      var postForm = {
-        content: [{ 'id': row.id, 'pass': 0 }]
-      }
-
-      console.log(typeof (postForm.content))
-      ApproveTeacher(postForm)
+    disapproveClick(id) {
+      this.postForm.id = id
+      this.postForm.pass = 0
+      ApproveTeacher(this.postForm)
+      this.fetchData()
     }
   }
 }

@@ -38,6 +38,7 @@ const user = {
             setRole('admin')
           } else if (data.info.type === 2) {
             setRole('teahcer')
+            console.log(11)
           } else {
             reject('这不是一个合法账户')
           }
