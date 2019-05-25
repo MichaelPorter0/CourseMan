@@ -6,7 +6,7 @@ import { ToFormData } from '@/utils/toformdata'
  */
 export function getCourseList() {
   return request({
-    url: '/course/list-all',
+    url: '/course/my-list',
     method: 'post'
   })
 }

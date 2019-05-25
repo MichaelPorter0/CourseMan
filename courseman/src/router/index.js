@@ -25,9 +25,15 @@ import Layout from '../views/layout/Layout'
 export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/register', name: 'register', component: () => import('@/views/register/index'), hidden: true },
-  { path: '/retrieveppwd', name: 'retrieveppwd', component: () => import('@/views/retrieveppwd/index'), hidden: true },
-  { path: '/404', component: () => import('@/views/404'), hidden: true },
 
+  { path: '/404', component: () => import('@/views/404'), hidden: true },
+  {
+    path: '/retrieveppwd',
+    name: 'retrieveppwd',
+    component: () => import('@/views/retrieveppwd/index'),
+    hidden: true
+
+  },
   {
     path: '/',
     component: Layout,
@@ -39,7 +45,22 @@ export const constantRouterMap = [
       path: 'dashboard',
       component: () => import('@/views/dashboard/index'),
       meta: { title: '主页', icon: 'dashboard ' }
-    }]
+    },
+    {
+      path: 'modifypassword',
+      name: 'modifypassword',
+      hidden: true,
+      component: () => import('@/views/modifypassword/index'),
+      meta: { title: '主页', icon: 'dashboard ' }
+    },
+    {
+      path: 'modifyInfo',
+      name: 'modifyInfo',
+      hidden: true,
+      component: () => import('@/views/modifyInfo/index'),
+      meta: { title: '主页', icon: 'dashboard ' }
+    }
+    ]
   },
 
   {
@@ -198,10 +219,30 @@ export const asyncRouterMap = [
         meta: { title: '轮播图管理', icon: '首页轮播图' }
       },
       {
+        path: 'bannercreate',
+        name: 'bannercreate',
+        component: () => import('@/views/miniprogram/banner/create/index'),
+        hidden: true
+      },
+      {
         path: 'announcement',
         name: 'announcement',
-        component: () => import('@/views/miniprogram/announcement/index'),
+        component: () => import('@/views/miniprogram/announcement/list/index'),
         meta: { title: '通知管理', icon: '通知' }
+      },
+      {
+        path: 'createannouncement',
+        name: 'createannouncement',
+        hidden: true,
+        component: () => import('@/views/miniprogram/announcement/create/index')
+
+      },
+      {
+        path: 'modifyannouncement',
+        name: 'modifyannouncement',
+        hidden: true,
+        component: () => import('@/views/miniprogram/announcement/modify/index')
+
       }
     ]
   },

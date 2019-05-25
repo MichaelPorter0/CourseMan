@@ -16,59 +16,38 @@
       border
       fit
       highlight-current-row>
-      <el-table-column align="center" label="ID" width="95">
+      <el-table-column align="center" label="ID" width="40">
         <template slot-scope="scope">
           {{ scope.row.id }}
         </template>
       </el-table-column>
-      <el-table-column label="课程名称" width="110">
+      <el-table-column label="通知内容" width="500">
         <template slot-scope="scope">
-          {{ scope.row.name }}
+          {{ scope.row.content }}
         </template>
       </el-table-column>
-      <!-- <el-table-column label="开课老师" width="110" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.teacher.nickname }}</span>
-        </template>
-      </el-table-column> -->
-      <el-table-column label="课程简介" width="440" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.short_introduction }}
-        </template>
-      </el-table-column>
-      <el-table-column label="课程类别" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.catalog }}
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="created_at" label="创建时间" width="200">
+
+      <el-table-column align="center" prop="created_at" label="创建时间" width="150">
         <template slot-scope="scope">
           <i class="el-icon-time"/>
           <span>{{ scope.row.create_time }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="选课学生人数" width="110" align="center">
+      <el-table-column align="center" prop="update_time" label="修改时间" width="150">
         <template slot-scope="scope">
-          {{ scope.row.activate_time }}
+          <i class="el-icon-time"/>
+          <span>{{ scope.row.update_time }}</span>
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="是否可以试听" width="110" align="center">
-        <template slot-scope="scope">
-          <el-tag v-if="scope.row.can_experience===1" :type="scope.row.can_experience | statusFilter">是</el-tag>
-          <el-tag v-else :type="scope.row.can_experience | statusFilter">否</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="created_at" label="操作" width="200">
+
+      <el-table-column align="center" prop="created_at" label="操作" width="170">
         <template slot-scope="scope">
           <el-button-group>
-            <el-tooltip class="item" effect="dark" content="编辑课程信息" placement="top-start">
+            <el-tooltip class="item" effect="dark" content="修改此通知" placement="top-start">
               <el-button type="primary" icon="el-icon-edit" @click="editClick(scope.row.id)" />
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="编辑课程内容" placement="top-start">
-              <el-button type="primary" icon="el-icon-s-unfold" @click="shareClick(scope.row.id)" />
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="删除此课程" placement="top-start">
-              <el-button type="primary" icon="el-icon-delete" @click="deleteClick(scope.row)" />
+            <el-tooltip class="item" effect="dark" content="删除此通知" placement="top-start">
+              <el-button type="primary" icon="el-icon-delete" @click="deleteClick(scope.row.id)" />
             </el-tooltip>
           </el-button-group>
         </template>
@@ -78,7 +57,7 @@
 </template>
 
 <script>
-import { getCourseList } from '@/api/course'
+import { getNotifyList, deleteNotify } from '@/api/miniprogram'
 import Sticky from '@/components/Sticky'
 import router from '@/router'
 export default {
@@ -118,7 +97,7 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
-      getCourseList(this.listQuery).then(response => {
+      getNotifyList(this.listQuery).then(response => {
         this.list = response.data.list
         this.listLoading = false
       })
@@ -127,17 +106,35 @@ export default {
       alert('搜索' + this.input)
     },
     createClick() {
-      router.push({ name: 'coursecreate' })
+      router.push({ name: 'createannouncement' })
     },
-    editClick(row) {
-      console.log(row)
-      router.push({ path: 'modify/' + row })
+    editClick(ID) {
+      this.$router.push({ name: 'modifyannouncement', query: {
+        notifyID: ID
+      }})
     },
-    shareClick(row) {
-      router.push({ path: 'chapter/' + row })
-    },
-    deleteClick(row) {
-      alert('现在还不能删除课程')
+    deleteClick(ID) {
+      this.$confirm('删除这则通知(ID=' + ID + ')吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        const data = {
+          id: ID
+        }
+        deleteNotify(data).then(response => {
+          this.fetchData()
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
     }
   }
 }

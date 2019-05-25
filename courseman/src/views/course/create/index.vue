@@ -20,9 +20,10 @@
                     <el-input
                       :rows="6"
                       v-model="postForm.short_introduction"
+                      :show-word-limit="true"
                       type="textarea"
+
                       maxlength="300"
-                      show-word-limit="true"
                       placeholder="请输入一个简短的课程介绍"/>
                   </el-form-item>
                 </el-col>
@@ -50,7 +51,7 @@
                       placeholder="您需要先点击下方的upload按钮上传一张图片来获得链接填入到这里"
                       maxlength="300"
                       style="width:300%"
-                      show-word-limit
+
                     />
                   </el-form-item>
                 </el-col>
@@ -86,12 +87,11 @@ import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { submitCourse } from '@/api/course'
 import { upLoadFile } from '@/api/video'
-import Warning from './Warning'
 import '@/utils/tinymce/zh_CN.js'
 // import router from '@/router'
 export default {
   name: 'CourseDetail',
-  components: { Tinymce, MDinput, Upload, Sticky, Warning },
+  components: { Tinymce, MDinput, Upload, Sticky },
   data() {
     const validateRequire = (rule, value, callback) => {
       console.log(value)

@@ -26,6 +26,23 @@ export function upLoadFile(data) {
     // transformRequest: [ToFormData]
   })
 }
+export function upLoadPubFile(data) {
+  var form = new FormData()
+  form.append('file', data.file)
+  form.append('asset', 'recommend')
+  console.log(data.file)
+
+  return request({
+    url: '/common/upload/file',
+    method: 'post',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded ' },
+    data: form,
+    processData: false,
+    contentType: false,
+    mimeType: 'multipart/form-data'
+    // transformRequest: [ToFormData]
+  })
+}
 /**
  * 把文件信息存入数据库
  * @param {*} data

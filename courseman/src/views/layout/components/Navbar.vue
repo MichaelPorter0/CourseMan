@@ -14,6 +14,12 @@
           </el-dropdown-item>
         </router-link>
         <el-dropdown-item divided>
+          <span style="display:block;" @click="changePassword">修改密码</span>
+        </el-dropdown-item>
+        <el-dropdown-item divided>
+          <span style="display:block;" @click="changeInfo">修改个人信息</span>
+        </el-dropdown-item>
+        <el-dropdown-item divided>
           <span style="display:block;" @click="logout">退出</span>
         </el-dropdown-item>
       </el-dropdown-menu>
@@ -38,6 +44,12 @@ export default {
     ])
   },
   methods: {
+    changeInfo() {
+      this.$router.push({ name: 'modifyInfo' })
+    },
+    changePassword() {
+      this.$router.push({ name: 'modifypassword' })
+    },
     toggleSideBar() {
       this.$store.dispatch('ToggleSideBar')
     },
