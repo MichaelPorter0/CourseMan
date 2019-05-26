@@ -13,7 +13,7 @@ export function PubHomework(data) {
   })
 }
 /**
- * 发布作业
+ * 获取学生提交的作业
  * @param {*} data
  */
 export function studentHomeworkList(data) {
@@ -37,12 +37,24 @@ export function studentHomeworkInfo(data) {
   })
 }
 /**
- * 获取一个作业
+ * 批复一个作业
  * @param {*} data
  */
 export function feedback(data) {
   return request({
     url: '/homework/feedback',
+    method: 'post',
+    data,
+    transformRequest: [ToFormData]
+  })
+}
+/**
+ * 获取课节下已发布的作业
+ * @param {*} data
+ */
+export function classHomeworkList(data) {
+  return request({
+    url: '/homework/class-homework-list',
     method: 'post',
     data,
     transformRequest: [ToFormData]

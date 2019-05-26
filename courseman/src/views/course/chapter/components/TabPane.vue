@@ -38,13 +38,11 @@
           <h1>{{ chapterForm.title }}</h1>
           <a>{{ chapterForm.intro }}</a>
         </el-collapse-item>
-        <el-collapse-item title="课前作业" name="2">
-          <h1>{{ chapterForm.title }}</h1>
-          <a>{{ chapterForm.intro }}</a>
-        </el-collapse-item>
-        <el-collapse-item title="课后作业" name="3">
-          <h1>{{ chapterForm.title }}</h1>
-          <a>{{ chapterForm.intro }}</a>
+        <el-collapse-item v-for="homework in homeworkList" :key="homework.id" :name="homework.id" :title="titleCheck(homework)">
+          <!-- <title v-if="homework.before===1">课前左右</title>
+          <title v-else>课后作业</title> -->
+          <h1>{{ homework.title }}</h1>
+          <div class="editor-content" v-html="homework.introduction " />
         </el-collapse-item>
       </el-collapse>
       <el-row >
@@ -80,6 +78,7 @@
 
 <script>
 import { getChapter, updateClass, deleteChapter } from '@/api/course'
+import { classHomeworkList } from '@/api/homework'
 import { getVideoList } from '@/api/video'
 export default {
   filters: {
@@ -106,6 +105,10 @@ export default {
       idForm: {
         id: this.chapterid
       },
+      idhomeworkForm: {
+        class_id: this.chapterid
+      },
+      homeworkList: null,
       chapterForm: {
         id: '',
         title: '',
@@ -117,11 +120,11 @@ export default {
       data: [],
       value: [],
       filterMethod(query, item) {
-        console.log(item)
         return item.label.indexOf(query) > -1
       }
     }
   },
+
   created() {
     this.getList()
   },
@@ -153,9 +156,21 @@ export default {
           })
         }
       })
+      // 获得课节下的作业
+      classHomeworkList(this.idhomeworkForm).then(response => {
+        this.homeworkList = response.data.list
+      })
     },
     handleChange(val) {
-      console.log(val)
+      // console.log(val)
+    },
+    titleCheck(homework) {
+      // console.log(homework)
+      if (homework.before === 1) {
+        return '课前作业'
+      } else {
+        return '课后作业'
+      }
     },
     CreateButton() {
       this.chapterForm.id = this.chapterid
@@ -184,8 +199,6 @@ export default {
       }})
     },
     PublishButton() {
-      console.log(11)
-
       this.$router.push({ name: 'homeworkpublish', query: {
         chapterID: this.chapterid
       }})
@@ -209,7 +222,6 @@ export default {
       }
     },
     DeleteButton() {
-      console.log(this.chapterid)
       this.$confirm('确定要删除吗?', '确认', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

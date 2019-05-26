@@ -9,7 +9,7 @@
       </el-row></el-header>
       <el-main>
         <el-row type="flex" justify="center">
-          <el-col :span="8">
+          <el-col :span="6">
             <el-upload
               ref="upload"
               :http-request="uploadfile"
@@ -41,11 +41,11 @@
           </el-col>
           <el-col :span="5" :offset="10">
             <div class="el-upload__tip"> 请您耐心等待文件上传完成后再离开本页</div>
+            <div class="el-upload__tip"> 当前仅支持上传MP4文件其他文件可能无法正常播放</div>
+            <div class="el-upload__tip"> 所有文件的名称和内容都将以文件名称命名</div>
           </el-col>
         </el-row>
-        <el-row>
-          <div>所有文件的名称和内容都将以文件名称命名</div>
-        </el-row>
+
       </el-main>
     </el-container>
 

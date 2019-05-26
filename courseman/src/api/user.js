@@ -84,3 +84,29 @@ export function ApproveTeacher(data) {
     transformRequest: [ToFormData]
   })
 }
+
+/**
+ * 修改个人信息
+ * @param {*}
+ */
+export function updateinfo(data) {
+  return request({
+    url: '/user/information/update-info',
+    method: 'post',
+    data,
+    transformRequest: [ToFormData]
+  })
+}
+
+/**
+ * 修改账号密码
+ * @param {*}
+ */
+export function changepw(data) {
+  return request({
+    url: '/user/account/changepw',
+    method: 'post',
+    data,
+    transformRequest: [ToFormData]
+  })
+}

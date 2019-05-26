@@ -9,7 +9,7 @@
       </el-row></el-header>
       <el-main>
         <el-row type="flex" justify="center">
-          <el-col :span="8">
+          <el-col :span="5">
             <el-upload
               ref="upload"
               :http-request="uploadfile"
@@ -24,15 +24,14 @@
               <i class="el-icon-upload" />
               <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
             </el-upload>
-          </el-col>
+          </el-col>x
         </el-row>
         <el-row type="flex" justify="center">
           <el-col :span="2" >
             <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-
           </el-col>
-          <el-col :span="2" :offset="2">
-            <el-button style="margin-left: 10px;" size="small" type="success" @click="clearFile">清空文件列表</el-button>
+          <el-col :span="2" :offset="1">
+            <el-button style="margin-left: 10px;" size="small" type="success" @click="clearFile">清空文件</el-button>
           </el-col>
         </el-row>
         <el-row>
@@ -41,35 +40,49 @@
           </el-col>
           <el-col :span="5" :offset="10">
             <div class="el-upload__tip"> 请您耐心等待文件上传完成后再离开本页</div>
+            <div class="el-upload__tip"> 当前仅支持上传MP4文件其他文件可能无法正常播放</div>
+            <div class="el-upload__tip"> 视频传输成功后，点击下方的确认上传按钮即可完成传输</div>
+
           </el-col>
         </el-row>
 
         <el-form ref="PostForm" :model="PostForm" class="login-form" auto-complete="on" label-position="left">
-
-          <el-form-item prop="email">
-            视频内容：
-            <el-input v-model="PostForm.title" placeholder="请输入内容"/>
-          </el-form-item>
-          <el-form-item prop="password">
-            视频介绍：
-            <el-input
-              v-model="PostForm.content"
-              type="textarea"
-              placeholder="请输入内容"
-              maxlength="30"
-              show-word-limit
-            />
-          </el-form-item>
+          <el-row>
+            <el-col :span="5" :offset="10">
+              <el-form-item prop="email">
+                视频内容：
+                <el-input v-model="PostForm.title" placeholder="请输入内容"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="5" :offset="10">
+              <el-form-item prop="password">
+                视频介绍：
+                <el-input
+                  v-model="PostForm.content"
+                  type="textarea"
+                  placeholder="请输入内容"
+                  maxlength="30"
+                  show-word-limit
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-form>
         <el-row>
-          <el-tag>{{ PostForm.url }}</el-tag>
+          <el-col :span="5" :offset="10">
+            <el-tag>{{ PostForm.url }}</el-tag>
+          </el-col>
         </el-row>
         <el-row>
-          <el-button type="primary" @click="addToVideoList">确认上传</el-button>
+          <el-col :span="5" :offset="10">
+            <el-button type="primary" @click="addToVideoList">确认上传</el-button>
+          </el-col>
         </el-row>
+
       </el-main>
     </el-container>
-
   </div>
 </template>
 

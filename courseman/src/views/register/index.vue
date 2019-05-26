@@ -8,7 +8,7 @@
         </span>
         <el-input v-model="RegisterForm.email" name="email" type="text" auto-complete="on" placeholder="输入您的邮箱" />
       </el-form-item>
-      <el-form-item prop="nickname">
+      <el-form-item >
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>

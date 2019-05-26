@@ -1,7 +1,7 @@
 <template>
   <div class="tab-container">
-    <el-tag>mounted times ：{{ createdTimes }}</el-tag>
-    <el-alert :closable="false" style="width:200px;display:inline-block;vertical-align: middle;margin-left:30px;" title="Tab with keep-alive" type="success" />
+    <el-tag>一个课节只能拥有一个最多一个课前作业和一个课后作业</el-tag>
+    <el-alert :closable="false" style="width:200px;display:inline-block;vertical-align: middle;margin-left:30px;" title="同一个课节的多个相同作业将不会在小程序中显示" type="success" />
     <el-button type="primary" title="添加课节" @click="createChapter"> 创建新的课节</el-button>
     <el-tabs v-model="activeName" style="margin-top:15px;" type="border-card">
       <el-tab-pane v-for="item in tabMapOptions" :key="item.key" :label="item.label" :name="item.label">
