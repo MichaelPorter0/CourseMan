@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import requestfile from '@/utils/requestnolimit'
 import { ToFormData } from '@/utils/toformdata'
 export function getVideoList() {
   return request({
@@ -15,7 +16,7 @@ export function upLoadFile(data) {
   form.append('file', data.file)
   form.append('asset', 'vedio')
 
-  return request({
+  return requestfile({
     url: '/common/upload/private-file',
     method: 'post',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded ' },
@@ -32,7 +33,7 @@ export function upLoadPubFile(data) {
   form.append('asset', 'recommend')
   console.log(data.file)
 
-  return request({
+  return requestfile({
     url: '/common/upload/file',
     method: 'post',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded ' },

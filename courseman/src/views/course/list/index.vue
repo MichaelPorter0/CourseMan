@@ -52,10 +52,17 @@
           {{ scope.row.activate_time }}
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="是否可以试听" width="110" align="center">
+      <!-- <el-table-column class-name="status-col" label="是否可以试听" width="110" align="center">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.can_experience===1" :type="scope.row.can_experience | statusFilter">是</el-tag>
           <el-tag v-else :type="scope.row.can_experience | statusFilter">否</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" prop="created_at" label="操作" width="200"> -->
+      <el-table-column class-name="status-col" label="课程老师" width="110" align="center">
+        <template slot-scope="scope">
+
+          <el-tag >{{ scope.row.catalog }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="操作" width="200">

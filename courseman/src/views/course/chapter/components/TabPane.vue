@@ -26,7 +26,7 @@
           <span>{{ row.vedio.url.url }}</span>
         </template>
       </el-table-column>
-      <el-table-column min-width="300px" label="视频名称">
+      <el-table-column min-width="300px" label="文件名称">
         <template slot-scope="{row}">
           <span>{{ row.vedio.url.filename }}</span>
         </template>

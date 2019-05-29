@@ -27,7 +27,7 @@
                   </el-form-item>
                 </el-col>
 
-                <el-col :span="6">
+                <!-- <el-col :span="6">
                   <el-form-item label-width="120px" label="开始时间:" prop="start_time" class="postInfo-container-item">
                     <el-date-picker v-model="postForm.start_time" type="date" format="yyyy-MM-dd" value-format="yyyy.MM.dd" placeholder="选择课程的开始时间" />
                   </el-form-item>
@@ -41,7 +41,7 @@
                   <el-form-item label-width="120px" label="是否可以体验" class="postInfo-container-item">
                     <el-switch v-model="postForm.can_experience" :active-value="1" :inactive-value="0" />
                   </el-form-item>
-                </el-col>
+                </el-col> -->
                 <el-col :span="12">
                   <el-form-item label-width="120px" label="封面图链接" class="postInfo-container-item">
                     <el-input

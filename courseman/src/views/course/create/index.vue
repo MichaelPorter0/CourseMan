@@ -22,13 +22,12 @@
                       v-model="postForm.short_introduction"
                       :show-word-limit="true"
                       type="textarea"
-
                       maxlength="300"
                       placeholder="请输入一个简短的课程介绍"/>
                   </el-form-item>
                 </el-col>
 
-                <el-col :span="6">
+                <!-- <el-col :span="6">
                   <el-form-item label-width="120px" label="开始时间:" prop="start_time" class="postInfo-container-item">
                     <el-date-picker v-model="postForm.start_time" type="date" format="yyyy-MM-dd" value-format="yyyy.MM.dd" placeholder="选择课程的开始时间" />
                   </el-form-item>
@@ -37,21 +36,32 @@
                   <el-form-item label-width="120px" label="结束时间:" prop="end_time" class="postInfo-container-item">
                     <el-date-picker v-model="postForm.end_time" type="date" format="yyyy-MM-dd" value-format="yyyy.MM.dd" placeholder="选择课程的结束时间" />
                   </el-form-item>
-                </el-col>
-                <el-col :span="12">
+                </el-col> -->
+                <!-- <el-col :span="12">
                   <el-form-item label-width="120px" label="是否可以体验" class="postInfo-container-item">
                     <el-switch v-model="postForm.can_experience" :active-value="1" :inactive-value="0" />
                   </el-form-item>
-                </el-col>
+                </el-col> -->
                 <el-col :span="12">
                   <el-form-item label-width="120px" label="封面图链接" class="postInfo-container-item">
                     <el-input
-                      v-model="postForm.experience_url"
+                      v-model="postForm.img"
                       type="text"
                       placeholder="您需要先点击下方的upload按钮上传一张图片来获得链接填入到这里"
                       maxlength="300"
                       style="width:300%"
 
+                    />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label-width="120px" label="教师：" class="postInfo-container-item">
+                    <el-input
+                      v-model="postForm.catalog"
+                      type="text"
+                      placeholder="教师名称"
+                      maxlength="300"
+                      style="width:300%"
                     />
                   </el-form-item>
                 </el-col>
@@ -94,8 +104,6 @@ export default {
   components: { Tinymce, MDinput, Upload, Sticky },
   data() {
     const validateRequire = (rule, value, callback) => {
-      console.log(value)
-
       if (value === '') {
         this.$message({
           message: rule.field + '为必传项',
@@ -118,8 +126,8 @@ export default {
         复制后点击插入->图片,在地址中粘贴您刚才获得的URL即可.</li><li>您编辑的内容会实时展示在下方供您预览</li>
       </ul>`,
         short_introduction: '',
-        start_time: '',
-        end_time: '',
+        start_time: '2019.05.07',
+        end_time: '2019.05.07',
         img: '',
         can_experience: 0,
         experience_url: ''
