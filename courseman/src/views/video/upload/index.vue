@@ -12,11 +12,13 @@
           <el-col :span="5">
             <el-upload
               ref="upload"
+              :on-progress="uploadVideoProcess"
               :http-request="uploadfile"
               :auto-upload="false"
               :before-remove="beforeRemove"
               :limit="1"
               :on-exceed="handleExceed"
+
               action=""
               class="upload-demo"
               drag
@@ -42,7 +44,10 @@
             <div class="el-upload__tip"> 请您耐心等待文件上传完成后再离开本页</div>
             <div class="el-upload__tip"> 当前仅支持上传MP4文件其他文件可能无法正常播放</div>
             <div class="el-upload__tip"> 视频传输成功后，点击下方的确认上传按钮即可完成传输</div>
-
+            <!-- <el-progress
+              :percentage="videoUploadPercent"
+              type="circle"
+              style="margin-top:30px;"/> -->
           </el-col>
         </el-row>
 
@@ -93,6 +98,7 @@ export default {
   data() {
     return {
       loadprogress: 0,
+      videoUploadPercent: 0,
       loadingFile: '没有文件正在上传',
       FileUploadForm: {
         asset: 'vedio',
@@ -107,6 +113,15 @@ export default {
     }
   },
   methods: {
+    uploadVideoProcess(event, file, fileList) {
+      // this.videoFlag = true
+      console.log(11)
+
+      console.log(file)
+
+      console.log(this.videoUploadPercent)
+      this.videoUploadPercent = file.percentage.toFixed(0) * 1
+    },
     submitUpload() {
       this.$confirm('确认上传这个文件到服务器吗?', '提示', {
         confirmButtonText: '确定',
@@ -186,7 +201,8 @@ export default {
           message: '已取消'
         })
       })
-    }, handleExceed(files, fileList) {
+    },
+    handleExceed(files, fileList) {
       this.$message.warning(`当前限制选择 1 个文件`)
     }
   }

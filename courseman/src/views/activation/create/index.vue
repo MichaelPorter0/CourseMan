@@ -76,7 +76,7 @@ export default {
           for (let index = 0; index < list.length; index++) {
             const option = {
               value: list[index].id,
-              label: '课程' + list[index].id
+              label: list[index].name
             }
             this.options.push(option)
           }

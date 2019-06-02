@@ -23,7 +23,6 @@ import '@/permission' // permission control
  * it will intercept your request, so you won't see the request in the network.
  * If you remove `../mock` it will automatically request easy-mock data.
  */
-// import '../mock' // simulation data
 
 import VueVideoPlayer from 'vue-video-player'
 import Viewer from 'v-viewer'

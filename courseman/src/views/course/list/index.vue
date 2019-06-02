@@ -36,11 +36,11 @@
           {{ scope.row.short_introduction }}
         </template>
       </el-table-column>
-      <el-table-column label="课程类别" width="110" align="center">
+      <!-- <el-table-column label="课程类别" width="110" align="center">
         <template slot-scope="scope">
           {{ scope.row.catalog }}
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column align="center" prop="created_at" label="创建时间" width="200">
         <template slot-scope="scope">
           <i class="el-icon-time"/>

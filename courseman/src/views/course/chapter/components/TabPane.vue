@@ -40,8 +40,12 @@
         </el-collapse-item>
         <el-collapse-item v-for="homework in homeworkList" :key="homework.id" :name="homework.id" :title="titleCheck(homework)">
           <!-- <title v-if="homework.before===1">课前左右</title>
+
           <title v-else>课后作业</title> -->
+          <el-button icon="el-icon-delete" title="删除此作业" circle @click="DeleteHomeworkButton(homework.id)"/>
+          <h1>作业编号：{{ homework.id }}</h1>
           <h1>{{ homework.title }}</h1>
+
           <div class="editor-content" v-html="homework.introduction " />
         </el-collapse-item>
       </el-collapse>
@@ -78,7 +82,7 @@
 
 <script>
 import { getChapter, updateClass, deleteChapter } from '@/api/course'
-import { classHomeworkList } from '@/api/homework'
+import { classHomeworkList, deleteClassHomework } from '@/api/homework'
 import { getVideoList } from '@/api/video'
 export default {
   filters: {
@@ -222,7 +226,7 @@ export default {
       }
     },
     DeleteButton() {
-      this.$confirm('确定要删除吗?', '确认', {
+      this.$confirm('确定要删除本课节吗?', '确认', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         center: true
@@ -234,6 +238,38 @@ export default {
           this.$notify({
             title: '成功',
             message: '课节删除成功,请您手动刷新本页面',
+            type: 'success',
+            duration: 5000
+          })
+          this.getList()
+        }).catch(() => {
+          this.$notify.error({
+            title: '错误',
+            message: '课节删除失败'
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
+      })
+    },
+    DeleteHomeworkButton(id) {
+      console.log(id)
+
+      this.$confirm('确定要删除这个作业吗?', '确认', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        center: true
+      }).then(() => {
+        const data = {
+          homework_id: id
+        }
+        deleteClassHomework(data).then(response => {
+          this.$notify({
+            title: '成功',
+            message: '作业删除成功',
             type: 'success',
             duration: 5000
           })

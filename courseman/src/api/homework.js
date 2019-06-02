@@ -61,3 +61,15 @@ export function classHomeworkList(data) {
   })
 }
 
+/**
+ * 删除课节下已发布的作业
+ * @param {*} data
+ */
+export function deleteClassHomework(data) {
+  return request({
+    url: '/homework/delete',
+    method: 'post',
+    data,
+    transformRequest: [ToFormData]
+  })
+}

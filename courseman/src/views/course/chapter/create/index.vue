@@ -16,10 +16,10 @@
               <el-input
                 v-model="postForm.intro"
                 :rows="5"
+                :show-word-limit="true"
                 type="textarea"
                 placeholder="请输入课节内容(限制50个字以内)"
                 maxlength="50"
-                show-word-limit="true"
               />
             </el-form-item>
           </el-col>
